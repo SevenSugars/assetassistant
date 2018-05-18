@@ -4,6 +4,7 @@ from django.db import models
 class User(models.Model):
     username = models.CharField(max_length=30)  #用户名
     password = models.CharField(max_length=30)  #密码
+    emailaddress = models.CharField(max_length=30)  #邮箱
 
 #新闻
 class News(models.Model):
@@ -20,7 +21,7 @@ class Recommend(models.Model):
     annualrate = models.FloatField      #年涨跌幅
 
 #股票
-class stock(models.Model):
+class Stock(models.Model):
     code = models.IntegerField      #代码
     name = models.CharField(max_length=30)      #名字
     price = models.FloatField      #当前价格
@@ -31,7 +32,7 @@ class stock(models.Model):
     currentrate = models.FloatField     #当前涨跌幅
 
 #基金
-class fund(models.Model):
+class Fund(models.Model):
     code = models.IntegerField      #代码
     name = models.CharField(max_length=30)      #名字
     price = models.FloatField      #当前价格
@@ -42,13 +43,13 @@ class fund(models.Model):
     annualrate = models.FloatField  #年收益率
 
 #收藏
-class favourite(models.Model):
+class Favourite(models.Model):
     username = models.CharField(max_length=30)  #用户名
     code = models.IntegerField      #代码
     name = models.CharField(max_length=30)      #名字
 
 #当前持有
-class own(models.Model):
+class Own(models.Model):
     username = models.CharField(max_length=30)  #用户名
     code = models.IntegerField      #代码
     name = models.CharField(max_length=30)      #名字
@@ -56,7 +57,7 @@ class own(models.Model):
     buy = models.FloatField         #买入价
 
 #历史交易
-class hist_trade(models.Model):
+class Hist_trade(models.Model):
     username = models.CharField(max_length=30)  #用户名
     code = models.IntegerField      #代码
     name = models.CharField(max_length=30)      #名字
@@ -65,7 +66,7 @@ class hist_trade(models.Model):
     time = models.TimeField         #交易时间
 
 #按操作结算资产
-class prosenal_asset(models.Model):
+class Prosenal_asset(models.Model):
     username = models.CharField(max_length=30)  #用户名
     stock = models.FloatField       #股票资产
     stockprofit = models.FloatField #股票收益
@@ -75,7 +76,7 @@ class prosenal_asset(models.Model):
     time = models.TimeField         #交易时间
 
 #按日结算资产
-class hist_asset(models.Model):
+class Hist_asset(models.Model):
     username = models.CharField(max_length=30)  #用户名
     stock = models.FloatField       #股票资产
     fund = models.FloatField        #基金资产
