@@ -4,7 +4,7 @@ from django.db import models
 class User(models.Model):
     username = models.CharField(max_length=30)  #用户名
     password = models.CharField(max_length=30)  #密码
-    emailaddress = models.EmailField(error_messages={'invalid': '请输入正确的邮箱格式'})  #邮箱
+    emailaddress = models.EmailField()  #邮箱
 
 #新闻
 class News(models.Model):
@@ -14,9 +14,15 @@ class News(models.Model):
     def __str__(self):
         return self.title
 
-#推荐
-class Recommend(models.Model):
-    code = models.IntegerField()      #推荐基金、股票、代码
+#推荐股票
+class RecommendStock(models.Model):
+    code = models.IntegerField()      #推荐股票代码
+    name = models.CharField(max_length=30)      #名字
+    annualrate = models.FloatField()      #年涨跌幅
+
+#推荐基金
+class RecommendFund(models.Model):
+    code = models.IntegerField()      #推荐基金代码
     name = models.CharField(max_length=30)      #名字
     annualrate = models.FloatField()      #年涨跌幅
 
