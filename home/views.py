@@ -11,7 +11,7 @@ def regist(request):
 def login(request):
     pass
 
-def news(request):
+def newspage(request):
     info = ts.get_latest_news(top=2, show_content=True)
     news = models.News()
     news.title = info.title[0].__str__()
@@ -21,7 +21,12 @@ def news(request):
     news.title = info.title[1].__str__()
     news.content = info.content[1].__str__()
     news.save()
-    return render(request, 'news.html', {'news':news})
+    news = models.News.objects.all()
+    return render(request, 'news.html', {'news': news})
+
+def shownews(request, news_id):
+    news = models.News.objects.get(pk=news_id)
+    return render(request, 'newsdetail.html', {'news': news})
 
 def recommend(request):
     pass
