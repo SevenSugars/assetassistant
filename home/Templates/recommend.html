@@ -6,10 +6,9 @@
 </head>
 <body>
 
-<!--<h1>{{ news.title }}</h1>-->
-
-{% for item in news %}
-    <a href="/news/{{ item.id }}">{{ item.title }}</a>
+{% for item in recF %}
+    <a href="/fund/{{ item.code }}">{{ item.name }}</a>
+    <h4>{{ item.annualrate }}%</h4>
     <br/>
 {% endfor %}
 </body>

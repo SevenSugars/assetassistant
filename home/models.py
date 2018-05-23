@@ -16,19 +16,19 @@ class News(models.Model):
 
 #推荐股票
 class RecommendStock(models.Model):
-    code = models.IntegerField()      #推荐股票代码
+    code = models.CharField(max_length=6)      #推荐股票代码
     name = models.CharField(max_length=30)      #名字
     annualrate = models.FloatField()      #年涨跌幅
 
 #推荐基金
 class RecommendFund(models.Model):
-    code = models.IntegerField()      #推荐基金代码
+    code = models.CharField(max_length=6)      #推荐基金代码
     name = models.CharField(max_length=30)      #名字
     annualrate = models.FloatField()      #年涨跌幅
 
 #股票
 class Stock(models.Model):
-    code = models.IntegerField()      #代码
+    code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
     price = models.FloatField()      #当前价格
     open = models.FloatField()       #今日开盘价
@@ -39,7 +39,7 @@ class Stock(models.Model):
 
 #基金
 class Fund(models.Model):
-    code = models.IntegerField()      #代码
+    code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
     price = models.FloatField()      #当前价格
     currentrate = models.FloatField()     #当前涨跌幅
@@ -51,13 +51,13 @@ class Fund(models.Model):
 #收藏
 class Favourite(models.Model):
     username = models.CharField(max_length=30)  #用户名
-    code = models.IntegerField()      #代码
+    code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
 
 #当前持有
 class Own(models.Model):
     username = models.CharField(max_length=30)  #用户名
-    code = models.IntegerField()      #代码
+    code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
     volume = models.FloatField()      #持有量
     buy = models.FloatField()         #买入价
@@ -65,7 +65,7 @@ class Own(models.Model):
 #历史交易
 class Hist_trade(models.Model):
     username = models.CharField(max_length=30)  #用户名
-    code = models.IntegerField()      #代码
+    code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
     volume = models.FloatField()      #交易量
     price = models.FloatField()       #交易价格
