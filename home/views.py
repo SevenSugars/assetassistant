@@ -1,18 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
+from django import forms
 from . import models
 import tushare as ts
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import re
-
+from datetime import date
+import matplotlib.pyplot as plt
+import json
 pd.set_option('max_colwidth', 20000)
 
-def regist(request):
-    pass
-
-def login(request):
-    pass
+def sign(request):
+    return render_to_response('sign.html')
 
 def newspage(request):
     info = ts.get_latest_news(top=2, show_content=True)
@@ -68,7 +68,7 @@ def showfund(request, fund_code):
     r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + fund_code + '.js')
     pattern0 = re.compile('var fS_name = "(.*?)"')
     name = re.findall(pattern0, r.text)
-    print(name, fund_code)
+    #print(name, fund_code)
     pattern1 = re.compile('var syl_1n="(.*?)"')
     oneyear = re.findall(pattern1, r.text)
     pattern2 = re.compile('var syl_6y="(.*?)"')
@@ -91,6 +91,64 @@ def showfund(request, fund_code):
     fund.price = price[-1]
     fund.currentrate =  rate[-1]
     fund.save()
+    pattern = re.compile('var Data_grandTotal = \[(.*?)\];')
+    tmp = re.findall(pattern, r.text)
+    data = tmp[0].split('},{')
+    data[0] = data[0] + '}'
+    data[1] = '{' + data[1] + '}'
+    data[2] = '{' + data[2]
+    funddata = pd.DataFrame(json.loads(data[0]))
+    averagedata = pd.DataFrame(json.loads(data[1]))
+    hsdata = pd.DataFrame(json.loads(data[2]))
+    #画图
+
+    time = []
+    rate = []
+    for item in funddata['data']:
+        x = date.fromtimestamp(item[0] / 1000)
+        time.append(date.strftime(x, '%Y-%m-%d'))
+        rate.append(item[1])
+    funddata['time'] = time
+    funddata['rate'] = rate
+    funddata.drop('data', axis=1, inplace=True)
+    funddata.rename(columns={'rate': funddata['name'][0]}, inplace=True)
+    funddata.drop('name', axis=1, inplace=True)
+    # funddata = funddata.set_index(['time'])
+    time = []
+    rate = []
+    for item in averagedata['data']:
+        x = date.fromtimestamp(item[0] / 1000)
+        time.append(date.strftime(x, '%Y-%m-%d'))
+        rate.append(item[1])
+    averagedata['time'] = time
+    averagedata['rate'] = rate
+    averagedata.drop('data', axis=1, inplace=True)
+    averagedata.rename(columns={'rate': averagedata['name'][0]}, inplace=True)
+    averagedata.drop('name', axis=1, inplace=True)
+    # averagedata = averagedata.set_index(['time'])
+    tmp = pd.merge(funddata, averagedata, on='time')
+    time = []
+    rate = []
+    for item in hsdata['data']:
+        x = date.fromtimestamp(item[0] / 1000)
+        time.append(date.strftime(x, '%Y-%m-%d'))
+        rate.append(item[1])
+    hsdata['time'] = time
+    hsdata['rate'] = rate
+    hsdata.drop('data', axis=1, inplace=True)
+    hsdata.rename(columns={'rate': hsdata['name'][0]}, inplace=True)
+    hsdata.drop('name', axis=1, inplace=True)
+    result = pd.merge(tmp, hsdata, on='time')
+    result = result.set_index(['time'])
+    plt.figure()
+    plt.rcParams['font.sans-serif'] = ['SimHei']
+    plt.rcParams['axes.unicode_minus'] = False
+    result.plot(rot=30)
+    plt.ylabel('累计涨跌率(%)')
+    plt.legend(loc='best')
+    plt.savefig(r'D:\mine\assetassistant\static\fund.png')
+    plt.close('all')
+    #sleep(1)
     return render(request, 'funddetail.html', {'fund': fund})
 
 

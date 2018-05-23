@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,5 +14,8 @@
 <h3>近6月涨跌：{{ fund.sixmrate }}%</h3>
 <h3>近3月涨跌：{{ fund.threemrate }}%</h3>
 <h3>近1月涨跌：{{ fund.onemrate }}%</h3>
+<p>
+<img src="/static/fund.png" />
+</p>
 </body>
 </html>
