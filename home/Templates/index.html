@@ -1,0 +1,347 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>理财小助手-HOME</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'index/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="{% static 'index/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css' %}">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <script src="https://use.fontawesome.com/f9e8f1bf2d.js"></script>
+    <!-- Plugin CSS -->
+    <link href="{% static 'index/vendor/magnific-popup/magnific-popup.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'index/css/creative.min.css' %}" rel="stylesheet">
+    <!--jQuery-->
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+  </head>
+  <script>
+    $(document).ready(function(){
+
+        //产品图标悬浮效果
+    $('#to_detail').mouseover(function(){
+        $('#to_detail').removeClass("fa-4x").addClass("fa-5x");
+    });
+    $('#to_detail').mouseout(function(){
+            $('#to_detail').removeClass("fa-5x").addClass('fa-4x');
+
+    });
+        //产品图标点击跳转
+        $('#to_detail').on('click',function(){
+            window.location.href="http://localhost:8000/log/register"; //修改
+        });
+
+        //新闻图标悬浮效果
+        $('#to_news').mouseover(function(){
+            $('#to_news').removeClass("fa-4x").addClass("fa-5x");
+        });
+        $('#to_news').mouseout(function(){
+            $('#to_news').removeClass("fa-5x").addClass('fa-4x');
+
+        });
+        //新闻图标点击跳转
+        $('#to_news').on('click',function(){
+            window.location.href="http://localhost:8000/log/register"; //修改
+        });
+
+        //教程图标悬浮效果
+        $('#to_guide').mouseover(function(){
+            $('#to_guide').removeClass("fa-4x").addClass("fa-5x");
+        });
+        $('#to_guide').mouseout(function(){
+            $('#to_guide').removeClass("fa-5x").addClass('fa-4x');
+
+        });
+        //教程图标点击跳转
+        $('#to_guide').on('click',function(){
+            window.location.href="http://localhost:8000/log/register"; //修改
+        });
+
+        //个人管理图标悬浮效果
+        $('#to_personal').mouseover(function(){
+            $('#to_personal').removeClass("fa-4x").addClass("fa-5x");
+        });
+        $('#to_personal').mouseout(function(){
+            $('#to_personal').removeClass("fa-5x").addClass('fa-4x');
+
+        });
+        //个人管理图标点击跳转
+        $('#to_personal').on('click',function(){
+            window.location.href="http://localhost:8000/log/register"; //修改
+        });
+
+
+    });
+
+  </script>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">理财小助手</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#首页">首页</a> <!--修改-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#推荐">推荐</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#新闻">新闻</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#教程">教程</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#个人">个人</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/log/register">登录</a>
+            </li>
+
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="masthead text-center text-white d-flex">
+      <div class="container my-auto">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <h1 class="text-uppercase">
+              <strong>理财小助手<br>——您的私人理财管家</br></strong>
+            </h1>
+            <hr>
+          </div>
+          <div class="col-lg-8 mx-auto">
+            <p class="text-faded mb-5">理财小助手是”一站式“在线投融资平台，将传统金融业务与互联网技术相结合，探索全新的互联网金融发展模式，致力于为个人用户提供安全、高收益、定制化的金融服务，让投资理财变得简单快乐。</p>
+            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#services">了解我们</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+
+
+    <section id="services">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading">竭诚为您服务</h2>
+            <hr class="my-4">
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-area-chart text-primary mb-3 sr-icons" id="to_detail"></i>
+              <h3 class="mb-3" href="http://localhost:8000/log/register" >丰富的产品</h3>
+              <p class="text-muted mb-0">整合多种资源，股票、基金等充足的投资理财产品供您选择。</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-newspaper-o text-primary mb-3 sr-icons" id="to_news"></i>
+              <h3 class="mb-3">及时的资讯</h3>
+              <p class="text-muted mb-0">及时的金融资讯让您第一时间了解市场动态和政策走向。</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-book text-primary mb-3 sr-icons" id="to_guide"></i>
+              <h3 class="mb-3">实用的指导</h3>
+              <p class="text-muted mb-0">即使是新手也能在这里得到优质的理财体验。
+</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x fa-calculator text-primary mb-3 sr-icons" id="to_personal"></i>
+              <h3 class="mb-3">高效的管理</h3>
+              <p class="text-muted mb-0">简洁而功能强大的个人资产管理平台，有助于做出更好的投资理财决定。
+</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        <div class="col-lg-12 text-center">
+          <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">探索更多</a>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-primary" id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading text-white">注册解锁小助手的更多功能</h2>
+            <hr class="light my-4">
+            <!--
+            <p class="text-faded mb-4">Start Bootstrap has everything you need to get your new website up and running in no time! All of the templates and themes on Start Bootstrap are open source, free to download, and easy to use. No strings attached!</p>
+            -->
+            <a class="btn btn-light btn-xl js-scroll-trigger" href="http://localhost:8000/log/register">注册/登录</a>
+          </div>
+        </div>
+      </div>
+    </section>
+<!--
+    <section class="p-0" id="portfolio">
+      <div class="container-fluid p-0">
+        <div class="row no-gutters popup-gallery">
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="{% static  'index/img/portfolio/fullsize/1.jpg'%}">
+              <img class="img-fluid" src="{% static 'index/img/portfolio/thumbnails/1.jpg'%}" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="{%static 'index/img/portfolio/fullsize/2.jpg'%}">
+              <img class="img-fluid" src="{%static 'index/img/portfolio/thumbnails/2.jpg'%}" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="{%static 'index/img/portfolio/fullsize/3.jpg'%}">
+              <img class="img-fluid" src="{%static 'index/img/portfolio/thumbnails/3.jpg'%}" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="{%static 'img/portfolio/fullsize/4.jpg'%}">
+              <img class="img-fluid" src="{%static 'img/portfolio/thumbnails/4.jpg'%}" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="img/portfolio/fullsize/5.jpg">
+              <img class="img-fluid" src="img/portfolio/thumbnails/5.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <a class="portfolio-box" href="img/portfolio/fullsize/6.jpg">
+              <img class="img-fluid" src="img/portfolio/thumbnails/6.jpg" alt="">
+              <div class="portfolio-box-caption">
+                <div class="portfolio-box-caption-content">
+                  <div class="project-category text-faded">
+                    Category
+                  </div>
+                  <div class="project-name">
+                    Project Name
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+-->
+
+    <section id="contact">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading">联系开发者</h2>
+            <hr class="my-4">
+            <p class="mb-5">本项目由 Hangzhi 、Jiefan Cheng 、Shujia Jja 、Siqing Bao 共同开发。</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 ml-auto text-center">
+            <i class="fa fa-git fa-3x mb-3 sr-contact"></i>
+            <p>SevenSugars/assetassistant</p>
+          </div>
+          <div class="col-lg-4 mr-auto text-center">
+            <i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i>
+            <p>
+              <a href="mailto:your-email@your-domain.com">1454678938@qq.com</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'index/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'index/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'index/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'index/vendor/scrollreveal/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'index/vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="{% static 'index/js/creative.min.js' %}"></script>
+
+  </body>
+
+</html>
