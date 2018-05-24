@@ -1,4 +1,5 @@
 from django.shortcuts import render, render_to_response
+from django.http import HttpResponse
 from django import forms
 from . import models
 import tushare as ts
@@ -9,13 +10,47 @@ import re
 from datetime import date
 import matplotlib.pyplot as plt
 import json
+from email import encoders
+from email.header import Header
+from email.mime.text import MIMEText
+from email.utils import parseaddr, formataddr
+import smtplib
 pd.set_option('max_colwidth', 20000)
 
 def index(request):
     return render(request, 'index.html')
 
+def _format_addr(s):
+    name, addr = parseaddr(s)
+    return formataddr((Header(name, 'utf-8').encode(), addr))
+
+def sendemail(c, e):
+    from_addr = '178414306@qq.com'
+    password = 'afipsxglvphmcahg'
+    to_addr = e
+    smtp_server = 'smtp.qq.com'
+    message = '您好！您的验证码是：' + c
+    msg = MIMEText(message, 'plain', 'utf-8')
+    msg['From'] = _format_addr('理财小助手 <%s>' % from_addr)
+    msg['To'] = _format_addr('管理员 <%s>' % to_addr)
+    msg['Subject'] = Header('[理财小助手]激活邮箱账号', 'utf-8').encode()
+
+    server = smtplib.SMTP_SSL(smtp_server, 465)
+    server.set_debuglevel(1)
+    server.login(from_addr, password)
+    server.sendmail(from_addr, [to_addr], msg.as_string())
+    server.quit()
+
 def sign(request):
-    return render_to_response('sign.html')
+    if request.is_ajax():
+        if request.POST.get('vericode'):
+            vericode = request.POST.get('vericode')
+            email = request.POST.get('email')
+            print(vericode, email)
+            sendemail(vericode, email)
+        else:
+            print("error")
+    return render(request, 'sign.html')
 
 def newspage(request):
     info = ts.get_latest_news(top=2, show_content=True)
