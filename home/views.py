@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 import json
 pd.set_option('max_colwidth', 20000)
 
+def index(request):
+    return render(request, 'index.html')
+
 def sign(request):
     return render_to_response('sign.html')
 
