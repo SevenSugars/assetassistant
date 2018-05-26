@@ -1,6 +1,5 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
-from django import forms
 from . import models
 import tushare as ts
 import pandas as pd
@@ -32,7 +31,7 @@ def sendemail(c, e):
     message = '您好！您的验证码是：' + c
     msg = MIMEText(message, 'plain', 'utf-8')
     msg['From'] = _format_addr('理财小助手 <%s>' % from_addr)
-    msg['To'] = _format_addr('管理员 <%s>' % to_addr)
+    msg['To'] = _format_addr('尊敬的用户 <%s>' % to_addr)
     msg['Subject'] = Header('[理财小助手]激活邮箱账号', 'utf-8').encode()
 
     server = smtplib.SMTP_SSL(smtp_server, 465)
@@ -139,7 +138,6 @@ def showfund(request, fund_code):
     averagedata = pd.DataFrame(json.loads(data[1]))
     hsdata = pd.DataFrame(json.loads(data[2]))
     #画图
-
     time = []
     rate = []
     for item in funddata['data']:
@@ -186,7 +184,22 @@ def showfund(request, fund_code):
     plt.legend(loc='best')
     plt.savefig(r'D:\mine\assetassistant\static\fund.png')
     plt.close('all')
-    #sleep(1)
     return render(request, 'funddetail.html', {'fund': fund})
 
+def buy(request):
+    pass
 
+def sell(request):
+    pass
+
+def showinfo(request):
+    pass
+
+def favourite(request):
+    pass
+
+def showown(request):
+    pass
+
+def showhist(request):
+    pass

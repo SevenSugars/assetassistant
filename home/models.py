@@ -53,6 +53,7 @@ class Favourite(models.Model):
     username = models.CharField(max_length=30)  #用户名
     code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
+    rate = models.FloatField()                  #当日涨跌
 
 #当前持有
 class Own(models.Model):
