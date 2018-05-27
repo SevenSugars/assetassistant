@@ -11,5 +11,11 @@
     <h4>{{ item.annualrate }}%</h4>
     <br/>
 {% endfor %}
+
+{% for item in recS %}
+    <a href="/stock/{{ item.code }}">{{ item.name }}</a>
+    <h4>{{ item.rate }}%</h4>
+    <br/>
+{% endfor %}
 </body>
 </html>

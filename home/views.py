@@ -14,6 +14,8 @@ from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
 import smtplib
+from PIL import Image
+from io import BytesIO
 pd.set_option('max_colwidth', 20000)
 
 def index(request):
@@ -105,6 +107,7 @@ def shownews(request, news_id):
     return render(request, 'newsdetail.html', {'news': news})
 
 def recommend(request):
+    #基金
     if not models.RecommendFund.objects.all():
         r = requests.get('http://fund.eastmoney.com/trade/default.html')
         encode_content = r.content.decode('gb2312')
@@ -125,14 +128,120 @@ def recommend(request):
             recF.name = name[i].string
             recF.annualrate = rate[i]
             recF.save()
-    recF = models.RecommendFund.objects.all()
-    return render(request, 'recommend.html', {'recF': recF})
+    #股票
+    if not models.RecommendStock.objects.all():
+        rs = ts.cap_tops()
+        for i in range(0, 30):
+            stock_code=rs.code[i]
+            stockdata = requests.get('http://hq.sinajs.cn/list=sh' + stock_code)
+            stockdatasplit = stockdata.text.split(',')
+            if (len(stockdata.text) == 24):
+                stockdata = requests.get('http://hq.sinajs.cn/list=sz' + stock_code)
+                stockdatasplit = stockdata.text.split(',')
+                stock = models.Stock()
+                stock.code = stock_code
+                stock.name = stockdatasplit[0][21:]
+                stock.open = stockdatasplit[1]
+                stock.close = stockdatasplit[2]
+                if float(stock.close)==0:
+                    continue
+                stock.high = stockdatasplit[4]
+                stock.low = stockdatasplit[5]
+                stock.price = stockdatasplit[3]
+                stock.currentrate = (float(stock.price) - float(stock.close)) / float(stock.close) * 100
+            else:
+                stock = models.Stock()
+                stock.code = stock_code
+                stock.name = stockdatasplit[0][21:]
+                stock.open = stockdatasplit[1]
+                stock.close = stockdatasplit[2]
+                if float(stock.close)==0:
+                    continue
+                stock.high = stockdatasplit[4]
+                stock.low = stockdatasplit[5]
+                stock.price = stockdatasplit[3]
+                stock.currentrate = (float(stock.price) - float(stock.close)) / float(stock.close) * 100
+            w = round(stock.currentrate, 4)
+            if abs(w)>11:
+                continue
+            recS = models.RecommendStock()
+            recS.code = rs.code[i]
+            recS.name = rs.name[i]
+            recS.rate = w
+            recS.save()
+    recF = models.RecommendFund.objects.all()()
+    recS = models.RecommendStock.objects.all()
+    return render(request, 'recommend.html', {'recF': recF, 'recS': recS})
 
 def tutorial(request):
     pass
 
-def showstock(request):
-    pass
+
+def showstock(request, stock_code):
+    stock_code = str(stock_code)
+    while len(stock_code) < 6:
+        stock_code = '0' + stock_code
+
+    stockdata = requests.get('http://hq.sinajs.cn/list=sh' + stock_code )
+    stockdatasplit = stockdata.text.split(',')
+    if(len(stockdata.text)==24):
+        stockdata = requests.get('http://hq.sinajs.cn/list=sz' + stock_code)
+        stockdatasplit = stockdata.text.split(',')
+
+        stock = models.Stock()
+        stock.code = stock_code
+        stock.name = stockdatasplit[0][21:]
+        stock.open = stockdatasplit[1]
+        stock.close = stockdatasplit[2]
+        stock.high = stockdatasplit[4]
+        stock.low = stockdatasplit[5]
+        stock.price = stockdatasplit[3]
+        stock.currentrate = (float(stock.price) - float(stock.close)) / float(stock.close) * 100
+        stock.save()
+
+        response = requests.get('http://image.sinajs.cn/newchart/min/n/sz' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock0.png')
+
+        response = requests.get('http://image.sinajs.cn/newchart/daily/n/sz' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock1.png')
+
+        response = requests.get('http://image.sinajs.cn/newchart/weekly/n/sz' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock2.png')
+
+        response = requests.get('http://image.sinajs.cn/newchart/monthly/n/sz' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock3.png')
+    else:
+        stock = models.Stock()
+        stock.code = stock_code
+        stock.name = stockdatasplit[0][21:]
+        stock.open = stockdatasplit[1]
+        stock.close = stockdatasplit[2]
+        stock.high = stockdatasplit[4]
+        stock.low = stockdatasplit[5]
+        stock.price = stockdatasplit[3]
+        stock.currentrate = (float(stock.price) - float(stock.close)) / float(stock.close) * 100
+        stock.save()
+        response = requests.get('http://image.sinajs.cn/newchart/min/n/sh' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock0.png')
+
+        response = requests.get('http://image.sinajs.cn/newchart/daily/n/sh' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock1.png')
+
+        response = requests.get('http://image.sinajs.cn/newchart/weekly/n/sh' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock2.png')
+
+        response = requests.get('http://image.sinajs.cn/newchart/monthly/n/sh' + stock_code + '.gif')
+        image = Image.open(BytesIO(response.content))
+        image.save('static\stock3.png')
+
+    return render(request, 'stockdetail.html', {'stock': stock})
 
 def showfund(request, fund_code):
     fund_code = str(fund_code)
@@ -233,18 +342,22 @@ def showfund(request, fund_code):
             fav.save()
         else:
             if request.method == 'POST':
-                number = request.POST.get('number')
-                try:
-                    own = models.Own.objects.get(emailaddress=email, name=name[0])
-                except:
-                    own = models.Own()
-                    own.emailaddress = email
-                    own.buy = price[-1]
-                    own.code = fund_code
-                    own.name = name[0]
-                    own.volume = number
-                else:
-                    own.volume += number
+                if request.POST.get('number'):
+                    number = request.POST.get('number')
+                    try:
+                        own = models.Own.objects.get(emailaddress=email, name=name[0])
+                    except:
+                        own = models.Own()
+                        own.emailaddress = email
+                        own.buy = price[-1]
+                        own.code = fund_code
+                        own.name = name[0]
+                        own.volume = number
+                        own.save()
+                    else:
+                        own.buy = (own.volume*own.buy + number*price[-1])/(own.volume + number)
+                        own.volume += number
+                        own.save()
             return render(request, 'buy.html', {'fund': fund})
     return render(request, 'funddetail.html', {'fund': fund})
 
@@ -270,7 +383,15 @@ def showinfo(request):
     pass
 
 def favourite(request):
-    fav = models.Favourite.objects.all()
+    email = request.session.get("email")
+    #print(email)
+    if email is None:
+        info = '请先登录！'
+        return render(request, 'error.html', {'error': info})
+    try:
+        fav = models.Favourite.objects.get(emailaddress=email)
+    except:
+        fav = []
     return render(request, 'favourite.html', {'fav': fav})
 
 def showown(request):

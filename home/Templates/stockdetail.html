@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>{{ stock.name }}</h3>
+<h3>{{ stock.code }}</h3>
+<h3>price：{{ stock.price }}</h3>
+<h3>open：{{ stock.open }}</h3>
+<h3>close：{{ stock.close }}</h3>
+<h3>high：{{ stock.high }}</h3>
+<h3>low：{{ stock.low }}</h3>
+<h3>currentrate：{{ stock.currentrate }}%</h3>
+<p>
+    <img src="/static/stock0.png" />
+    <img src="/static/stock1.png" />
+    <img src="/static/stock2.png" />
+    <img src="/static/stock3.png" />
+
+</p>
+</body>
+</html>
