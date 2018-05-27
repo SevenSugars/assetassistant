@@ -45,10 +45,16 @@ def sign(request):
         if request.POST.get('vericode'):
             vericode = request.POST.get('vericode')
             email = request.POST.get('email')
-            print(vericode, email)
             sendemail(vericode, email)
         else:
             print("error")
+    if request.method == 'GET':
+        if request.GET:
+            user = models.User()
+            user.username = request.GET.get('username')
+            user.password = request.GET.get('password')
+            user.emailaddress = request.GET.get('email')
+
     return render(request, 'sign.html')
 
 def newspage(request):
@@ -182,8 +188,21 @@ def showfund(request, fund_code):
     result.plot(rot=30)
     plt.ylabel('累计涨跌率(%)')
     plt.legend(loc='best')
-    plt.savefig(r'D:\mine\assetassistant\static\fund.png')
+    plt.savefig(r'static\fund.png')
     plt.close('all')
+    if request.method == 'POST':
+        favall = models.Favourite.objects.all()
+        flag = False
+        for item in favall:
+            if fund_code == item.code:
+                flag = True
+                break
+        if flag == False:
+            fav = models.Favourite()
+            fav.code = fund_code
+            fav.name = name[0]
+            fav.rate = oneyear[0]
+            fav.save()
     return render(request, 'funddetail.html', {'fund': fund})
 
 def buy(request):
@@ -196,7 +215,8 @@ def showinfo(request):
     pass
 
 def favourite(request):
-    pass
+    fav = models.Favourite.objects.all()
+    return render(request, 'favourite.html', {'fav': fav})
 
 def showown(request):
     pass
