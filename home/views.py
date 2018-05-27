@@ -1,12 +1,12 @@
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponse , HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from . import models
 import tushare as ts
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import re
-from datetime import date
+from datetime import date, datetime
 import matplotlib.pyplot as plt
 import json
 from email import encoders
@@ -17,6 +17,8 @@ import smtplib
 from PIL import Image
 from io import BytesIO
 pd.set_option('max_colwidth', 20000)
+
+code = '123456'
 
 def index(request):
     return render(request, 'index.html')
@@ -176,7 +178,6 @@ def recommend(request):
 def tutorial(request):
     pass
 
-
 def showstock(request, stock_code):
     stock_code = str(stock_code)
     while len(stock_code) < 6:
@@ -223,7 +224,7 @@ def showstock(request, stock_code):
         stock.high = stockdatasplit[4]
         stock.low = stockdatasplit[5]
         stock.price = stockdatasplit[3]
-        stock.currentrate = (float(stock.price) - float(stock.close)) / float(stock.close) * 100
+        stock.currentrate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
         stock.save()
         response = requests.get('http://image.sinajs.cn/newchart/min/n/sh' + stock_code + '.gif')
         image = Image.open(BytesIO(response.content))
@@ -241,6 +242,43 @@ def showstock(request, stock_code):
         image = Image.open(BytesIO(response.content))
         image.save('static\stock3.png')
 
+    if request.method == 'POST':
+        email = request.session.get("email")
+        print(email)
+        if email is None:
+            info = '请先登录！'
+            return render(request, 'error.html', {'error': info})
+        elif request.POST.__contains__('shoucang'):
+            favall = models.FavouriteStock.objects.all()
+            for item in favall:
+                if stock_code == item.code:
+                    info = '请勿重复收藏！'
+                    return render(request, 'error.html', {'error': info})
+            fav = models.FavouriteStock()
+            fav.code = stock_code
+            fav.emailaddress = email
+            fav.name = stockdatasplit[0][21:]
+            fav.rate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
+            fav.save()
+        else:
+            if request.method == 'POST':
+                if request.POST.get('number'):
+                    number = request.POST.get('number')
+                    try:
+                        own = models.Own.objects.get(emailaddress=email, name=stockdatasplit[0][21:])
+                    except:
+                        own = models.Own()
+                        own.emailaddress = email
+                        own.buy = stockdatasplit[3]
+                        own.code = stock_code
+                        own.name = stockdatasplit[0][21:]
+                        own.volume = number
+                        own.save()
+                    else:
+                        own.buy = (float(own.volume)*float(own.buy) + float(number)*float(stockdatasplit[3]))/(float(own.volume) + float(number))
+                        own.volume += float(number)
+                        own.save()
+            return render(request, 'buy.html', {'item': stock})
     return render(request, 'stockdetail.html', {'stock': stock})
 
 def showfund(request, fund_code):
@@ -283,45 +321,57 @@ def showfund(request, fund_code):
     averagedata = pd.DataFrame(json.loads(data[1]))
     hsdata = pd.DataFrame(json.loads(data[2]))
     #画图
-    time = []
-    rate = []
-    for item in funddata['data']:
-        x = date.fromtimestamp(item[0] / 1000)
-        time.append(date.strftime(x, '%Y-%m-%d'))
-        rate.append(item[1])
-    funddata['time'] = time
-    funddata['rate'] = rate
-    funddata.drop('data', axis=1, inplace=True)
-    funddata.rename(columns={'rate': funddata['name'][0]}, inplace=True)
-    funddata.drop('name', axis=1, inplace=True)
-    # funddata = funddata.set_index(['time'])
-    time = []
-    rate = []
-    for item in averagedata['data']:
-        x = date.fromtimestamp(item[0] / 1000)
-        time.append(date.strftime(x, '%Y-%m-%d'))
-        rate.append(item[1])
-    averagedata['time'] = time
-    averagedata['rate'] = rate
-    averagedata.drop('data', axis=1, inplace=True)
-    averagedata.rename(columns={'rate': averagedata['name'][0]}, inplace=True)
-    averagedata.drop('name', axis=1, inplace=True)
-    # averagedata = averagedata.set_index(['time'])
-    tmp = pd.merge(funddata, averagedata, on='time')
-    time = []
-    rate = []
-    for item in hsdata['data']:
-        x = date.fromtimestamp(item[0] / 1000)
-        time.append(date.strftime(x, '%Y-%m-%d'))
-        rate.append(item[1])
-    hsdata['time'] = time
-    hsdata['rate'] = rate
-    hsdata.drop('data', axis=1, inplace=True)
-    hsdata.rename(columns={'rate': hsdata['name'][0]}, inplace=True)
-    hsdata.drop('name', axis=1, inplace=True)
-    result = pd.merge(tmp, hsdata, on='time')
-    result = result.set_index(['time'])
-    plotfig(result)
+    global code
+    if code != fund_code:
+        time = []
+        rate = []
+        for item in funddata['data']:
+            x = date.fromtimestamp(item[0] / 1000)
+            time.append(date.strftime(x, '%Y-%m-%d'))
+            rate.append(item[1])
+        funddata['time'] = time
+        funddata['rate'] = rate
+        funddata.drop('data', axis=1, inplace=True)
+        funddata.rename(columns={'rate': funddata['name'][0]}, inplace=True)
+        funddata.drop('name', axis=1, inplace=True)
+        # funddata = funddata.set_index(['time'])
+        time = []
+        rate = []
+        for item in averagedata['data']:
+            x = date.fromtimestamp(item[0] / 1000)
+            time.append(date.strftime(x, '%Y-%m-%d'))
+            rate.append(item[1])
+        averagedata['time'] = time
+        averagedata['rate'] = rate
+        averagedata.drop('data', axis=1, inplace=True)
+        averagedata.rename(columns={'rate': averagedata['name'][0]}, inplace=True)
+        averagedata.drop('name', axis=1, inplace=True)
+        # averagedata = averagedata.set_index(['time'])
+        tmp = pd.merge(funddata, averagedata, on='time')
+        time = []
+        rate = []
+        for item in hsdata['data']:
+            x = date.fromtimestamp(item[0] / 1000)
+            time.append(date.strftime(x, '%Y-%m-%d'))
+            rate.append(item[1])
+        hsdata['time'] = time
+        hsdata['rate'] = rate
+        hsdata.drop('data', axis=1, inplace=True)
+        hsdata.rename(columns={'rate': hsdata['name'][0]}, inplace=True)
+        hsdata.drop('name', axis=1, inplace=True)
+        result = pd.merge(tmp, hsdata, on='time')
+        result = result.set_index(['time'])
+        plt.figure()
+        plt.rcParams['font.sans-serif'] = ['SimHei']
+        plt.rcParams['axes.unicode_minus'] = False
+        result.plot(rot=30)
+        plt.ylabel('累计涨跌率(%)')
+        plt.legend(loc='best')
+        plt.savefig(r'static\fund.png')
+        plt.cla()
+        plt.clf()
+        plt.close('all')
+        code = fund_code
     if request.method == 'POST':
         email = request.session.get("email")
         print(email)
@@ -329,18 +379,18 @@ def showfund(request, fund_code):
             info = '请先登录！'
             return render(request, 'error.html', {'error': info})
         elif request.POST.__contains__('shoucang'):
-            favall = models.Favourite.objects.all()
+            favall = models.FavouriteFund.objects.all()
             for item in favall:
                 if fund_code == item.code:
                     info = '请勿重复收藏！'
                     return render(request, 'error.html', {'error': info})
-            fav = models.Favourite()
+            fav = models.FavouriteFund()
             fav.code = fund_code
             fav.emailaddress = email
             fav.name = name[0]
             fav.rate = oneyear[0]
             fav.save()
-        else:
+        elif request.POST.__contains__('buy'):
             if request.method == 'POST':
                 if request.POST.get('number'):
                     number = request.POST.get('number')
@@ -355,32 +405,72 @@ def showfund(request, fund_code):
                         own.volume = number
                         own.save()
                     else:
-                        own.buy = (own.volume*own.buy + number*price[-1])/(own.volume + number)
-                        own.volume += number
+                        own.buy = (float(own.volume)*float(own.buy) + float(number)*float(price[-1]))/(float(own.volume) + float(number))
+                        own.volume += float(number)
                         own.save()
-            return render(request, 'buy.html', {'fund': fund})
+                    #对历史交易的处理：own  info  hist
+                    try:
+                        hist = models.Hist_trade.objects.get(emailaddress=email, name=name[0])
+                    except:
+                        hist = models.Hist_trade()
+                        hist.emailaddress = email
+                        hist.price = price[-1]
+                        hist.code = fund_code
+                        hist.name = name[0]
+                        hist.volume = number
+                        hist.time = models.DateTimeField(default=datetime.now)
+                        hist.save()
+                    else:
+                        hist.price = (own.volume*own.buy + number*price[-1])/(own.volume + number)
+                        hist.volume = number
+                        hist.save()
+                    #info
+                    try:
+                        info = models.Hist_asset.objects.get(emailaddress=email, name=name[0])
+                    except:
+                        info = models.Hist_trade()
+                        info.emailaddress = email
+                        info.fund+=number*price[-1]
+                        info.money-=number*price[-1]
+                        info.time = models.DateTimeField(default=datetime.now)
+                        info.save()
+                    else:
+                        info.price = (own.volume*own.buy + number*price[-1])/(own.volume + number)
+                        info.volume = number
+                        info.save()
+            return render(request, 'buy.html', {'item': fund})
+        else:
+            if request.method == 'POST':
+                if request.POST.get('number'):
+                    number = request.POST.get('number')
+                    try:
+                        own = models.Own.objects.get(emailaddress=email, name=name[0])
+                    except:
+                        info = '卖出量大于持有数量！'
+                        return render(request, 'error.html', {'error': info})
+                    else:
+                        if float(own.volume) < float(number):
+                            info = '卖出量大于持有数量！'
+                            return render(request, 'error.html', {'error': info})
+                        if float(own.volume) == float(number):
+                            pass
+            return render(request, 'sell.html', {'item': fund})
     return render(request, 'funddetail.html', {'fund': fund})
-
-def plotfig(result):
-    plt.figure()
-    plt.rcParams['font.sans-serif'] = ['SimHei']
-    plt.rcParams['axes.unicode_minus'] = False
-    result.plot(rot=30)
-    plt.ylabel('累计涨跌率(%)')
-    plt.legend(loc='best')
-    plt.savefig(r'static\fund.png')
-    plt.cla()
-    plt.clf()
-    plt.close('all')
 
 def error(request):
     return render(request, 'error.html')
 
-def sell(request):
-    pass
-
 def showinfo(request):
-    pass
+    email = request.session.get("email")
+    # print(email)
+    if email is None:
+        info = '请先登录！'
+        return render(request, 'error.html', {'error': info})
+    try:
+        info = models.Hist_asset.objects.get(emailaddress=email)
+    except:
+        info = []
+    return render(request, 'favourite.html', {'info': info})
 
 def favourite(request):
     email = request.session.get("email")
@@ -389,13 +479,35 @@ def favourite(request):
         info = '请先登录！'
         return render(request, 'error.html', {'error': info})
     try:
-        fav = models.Favourite.objects.get(emailaddress=email)
+        favF = models.FavouriteFund.objects.get(emailaddress=email)
     except:
-        fav = []
-    return render(request, 'favourite.html', {'fav': fav})
+        favF = []
+    try:
+        favS = models.FavouriteStock.objects.get(emailaddress=email)
+    except:
+        favS = []
+    return render(request, 'favourite.html', {'favF': favF, 'favS': favS})
 
 def showown(request):
-    pass
+    email = request.session.get("email")
+    # print(email)
+    if email is None:
+        info = '请先登录！'
+        return render(request, 'error.html', {'error': info})
+    try:
+        own = models.Own.objects.get(emailaddress=email)
+    except:
+        own = []
+    return render(request, 'own.html', {'own': own})
 
 def showhist(request):
-    pass
+    email = request.session.get("email")
+    # print(email)
+    if email is None:
+        info = '请先登录！'
+        return render(request, 'error.html', {'error': info})
+    try:
+        hist = models.Hist_trade.objects.get(emailaddress=email)
+    except:
+        hist = []
+    return render(request, 'hist.html', {'hist': hist})

@@ -12,16 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Favourite',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('emailaddress', models.EmailField(max_length=254)),
-                ('code', models.CharField(max_length=6)),
-                ('name', models.CharField(max_length=30)),
-                ('rate', models.FloatField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='Fund',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),

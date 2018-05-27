@@ -48,8 +48,15 @@ class Fund(models.Model):
     sixmrate = models.FloatField()      #近6月收益率
     annualrate = models.FloatField()  #年收益率
 
-#收藏
-class Favourite(models.Model):
+#收藏基金
+class FavouriteFund(models.Model):
+    emailaddress = models.EmailField()  #邮箱
+    code = models.CharField(max_length=6)      #代码
+    name = models.CharField(max_length=30)      #名字
+    rate = models.FloatField()                  #当日涨跌
+
+#收藏股票
+class FavouriteStock(models.Model):
     emailaddress = models.EmailField()  #邮箱
     code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字

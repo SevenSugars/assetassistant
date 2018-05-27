@@ -8,6 +8,11 @@
 <body>
 <h3>{{ stock.name }}</h3>
 <h3>{{ stock.code }}</h3>
+<form action="" method="post">
+{% csrf_token %}
+<input type="submit" name="shoucang" value="收藏" />
+<input type="submit" name="buyin" value="买入" />
+</form>
 <h3>price：{{ stock.price }}</h3>
 <h3>open：{{ stock.open }}</h3>
 <h3>close：{{ stock.close }}</h3>
