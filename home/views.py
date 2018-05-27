@@ -169,7 +169,7 @@ def recommend(request):
             recS.name = rs.name[i]
             recS.rate = w
             recS.save()
-    recF = models.RecommendFund.objects.all()()
+    recF = models.RecommendFund.objects.all()
     recS = models.RecommendStock.objects.all()
     return render(request, 'recommend.html', {'recF': recF, 'recS': recS})
 
