@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>{{ fund.name }}</h2>
+<h3>{{ fund.code }}</h3>
+单位净值：{{ fund.price }}
+<form action="" method="post">
+{% csrf_token %}
+<label>买入量：</label><br />
+<input type="number" name="number" value="number" />
+<input type="submit" value="买入" />
+</form>
+</body>
+</html>

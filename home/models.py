@@ -18,7 +18,7 @@ class News(models.Model):
 class RecommendStock(models.Model):
     code = models.CharField(max_length=6)      #推荐股票代码
     name = models.CharField(max_length=30)      #名字
-    annualrate = models.FloatField()      #年涨跌幅
+    rate = models.FloatField()      #当日涨跌幅
 
 #推荐基金
 class RecommendFund(models.Model):
@@ -50,14 +50,14 @@ class Fund(models.Model):
 
 #收藏
 class Favourite(models.Model):
-    username = models.CharField(max_length=30)  #用户名
+    emailaddress = models.EmailField()  #邮箱
     code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
     rate = models.FloatField()                  #当日涨跌
 
 #当前持有
 class Own(models.Model):
-    username = models.CharField(max_length=30)  #用户名
+    emailaddress = models.EmailField()  #邮箱
     code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
     volume = models.FloatField()      #持有量
@@ -65,7 +65,7 @@ class Own(models.Model):
 
 #历史交易
 class Hist_trade(models.Model):
-    username = models.CharField(max_length=30)  #用户名
+    emailaddress = models.EmailField()  #邮箱
     code = models.CharField(max_length=6)      #代码
     name = models.CharField(max_length=30)      #名字
     volume = models.FloatField()      #交易量
@@ -74,7 +74,7 @@ class Hist_trade(models.Model):
 
 #按操作结算资产
 class Prosenal_asset(models.Model):
-    username = models.CharField(max_length=30)  #用户名
+    emailaddress = models.EmailField()  #邮箱
     stock = models.FloatField()       #股票资产
     stockprofit = models.FloatField() #股票收益
     fund = models.FloatField()        #基金资产
@@ -84,7 +84,7 @@ class Prosenal_asset(models.Model):
 
 #按日结算资产
 class Hist_asset(models.Model):
-    username = models.CharField(max_length=30)  #用户名
+    emailaddress = models.EmailField()  #邮箱
     stock = models.FloatField()       #股票资产
     fund = models.FloatField()        #基金资产
     money = models.FloatField()       #现金资产

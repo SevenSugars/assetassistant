@@ -10,7 +10,8 @@
 <h3>{{ fund.code }}</h3>
 <form action="" method="post">
 {% csrf_token %}
-<input type="submit" value="收藏" />
+<input type="submit" name="shoucang" value="收藏" />
+<input type="submit" name="buyin" value="买入" />
 </form>
 <h3>单位净值：{{ fund.price }}%</h3>
 <h3>当前涨跌：{{ fund.currentrate }}%</h3>

@@ -27,6 +27,5 @@ urlpatterns = [
     path('home/', include('home.urls1')),
     path('stock/', include('home.urls2')),
     path('fund/', include('home.urls3')),
-    path('buy/', views.buy),
-    path('sell/', views.sell),
+    path('error/', views.error)
 ]

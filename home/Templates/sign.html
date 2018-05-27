@@ -101,10 +101,10 @@
                         data:{ email:signemail,vericode:vericode},
                         success:function(){
                             console.log(vericode,signemail);
-                            alert("成功了~");
+                            //alert("成功了~");
                         },
                         error:function(){
-                            alert("失败了");
+                            //alert("失败了");
                         }
                     })
 				}
@@ -149,6 +149,26 @@
                     $form_sign_post.submit();
 				}
 			})
+
+ 			$("#signin_submit").on('click',function(){
+                event.preventDefault();
+                var logemail= $.trim($('#signin-email').val());
+                var logpassword= $.trim($('#signin-password').val());
+                    $.ajax({
+                        type:'POST',
+                        data:{ email:logemail,password:logpassword},
+                        success:function(){
+                            console.log(logemail,logpassword);
+                            //alert("成功了~");
+                        },
+                        error:function(){
+                            //alert("失败了");
+                        }
+                    })
+            });
+
+
+
             //show forgot-password form
             $forgot_password_link.on('click', function(event){
                 event.preventDefault();
@@ -743,7 +763,7 @@ body {
 					</p>
 					--->
 					<p class="fieldset">
-						<input class="full-width" type="submit" value="登录">
+						<input class="full-width" id = "signin_submit" type="submit" value="登录">
 					</p>
 				</form>
 

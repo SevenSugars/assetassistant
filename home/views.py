@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse , HttpResponseRedirect
 from . import models
 import tushare as ts
 import pandas as pd
@@ -45,7 +45,32 @@ def sign(request):
         if request.POST.get('vericode'):
             vericode = request.POST.get('vericode')
             email = request.POST.get('email')
-            sendemail(vericode, email)
+            try:
+                user = models.User.objects.get(emailaddress=email)
+            except:
+                sendemail(vericode, email)
+            else:
+                info = '该邮箱已注册！'
+                print(info)
+                #return HttpResponseRedirect("/error/")
+        elif request.POST.get('email'):
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            try:
+                user = models.User.objects.get(emailaddress=email)
+            except:
+                info = '该邮箱未注册！'
+                print(info)
+                #return render(request, 'error.html', {'error': info})
+            else:
+                if user.password != password:
+                    info = '密码错误！'
+                    print(info)
+                    #return render(request, 'error.html', {'error': info})
+                else:
+                    request.session["email"] = email
+                    print('登录成功。')
+                    #return render(request, 'index.html')
         else:
             print("error")
     if request.method == 'GET':
@@ -54,7 +79,8 @@ def sign(request):
             user.username = request.GET.get('username')
             user.password = request.GET.get('password')
             user.emailaddress = request.GET.get('email')
-
+            request.session["email"] = user.emailaddress
+            user.save()
     return render(request, 'sign.html')
 
 def newspage(request):
@@ -67,8 +93,12 @@ def newspage(request):
     news.title = info.title[1].__str__()
     news.content = info.content[1].__str__()
     news.save()
-    news = models.News.objects.all()
-    return render(request, 'news.html', {'news': news})
+    news = models.News.objects.all().order_by('-pk')
+    news1 = models.News.objects.all()[0]
+    news2 = models.News.objects.all()[1]
+    news3 = models.News.objects.all()[2]
+    news = news[3:]
+    return render(request, 'news.html', {'news': news, 'news1': news1, 'news2': news2, 'news3': news3})
 
 def shownews(request, news_id):
     news = models.News.objects.get(pk=news_id)
@@ -182,6 +212,43 @@ def showfund(request, fund_code):
     hsdata.drop('name', axis=1, inplace=True)
     result = pd.merge(tmp, hsdata, on='time')
     result = result.set_index(['time'])
+    plotfig(result)
+    if request.method == 'POST':
+        email = request.session.get("email")
+        print(email)
+        if email is None:
+            info = '请先登录！'
+            return render(request, 'error.html', {'error': info})
+        elif request.POST.__contains__('shoucang'):
+            favall = models.Favourite.objects.all()
+            for item in favall:
+                if fund_code == item.code:
+                    info = '请勿重复收藏！'
+                    return render(request, 'error.html', {'error': info})
+            fav = models.Favourite()
+            fav.code = fund_code
+            fav.emailaddress = email
+            fav.name = name[0]
+            fav.rate = oneyear[0]
+            fav.save()
+        else:
+            if request.method == 'POST':
+                number = request.POST.get('number')
+                try:
+                    own = models.Own.objects.get(emailaddress=email, name=name[0])
+                except:
+                    own = models.Own()
+                    own.emailaddress = email
+                    own.buy = price[-1]
+                    own.code = fund_code
+                    own.name = name[0]
+                    own.volume = number
+                else:
+                    own.volume += number
+            return render(request, 'buy.html', {'fund': fund})
+    return render(request, 'funddetail.html', {'fund': fund})
+
+def plotfig(result):
     plt.figure()
     plt.rcParams['font.sans-serif'] = ['SimHei']
     plt.rcParams['axes.unicode_minus'] = False
@@ -189,24 +256,12 @@ def showfund(request, fund_code):
     plt.ylabel('累计涨跌率(%)')
     plt.legend(loc='best')
     plt.savefig(r'static\fund.png')
+    plt.cla()
+    plt.clf()
     plt.close('all')
-    if request.method == 'POST':
-        favall = models.Favourite.objects.all()
-        flag = False
-        for item in favall:
-            if fund_code == item.code:
-                flag = True
-                break
-        if flag == False:
-            fav = models.Favourite()
-            fav.code = fund_code
-            fav.name = name[0]
-            fav.rate = oneyear[0]
-            fav.save()
-    return render(request, 'funddetail.html', {'fund': fund})
 
-def buy(request):
-    pass
+def error(request):
+    return render(request, 'error.html')
 
 def sell(request):
     pass
