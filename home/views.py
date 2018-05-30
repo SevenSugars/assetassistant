@@ -16,6 +16,8 @@ from email.utils import parseaddr, formataddr
 import smtplib
 from PIL import Image
 from io import BytesIO
+import matplotlib
+matplotlib.use('Agg')
 pd.set_option('max_colwidth', 20000)
 
 code = '123456'
@@ -79,18 +81,28 @@ def sign(request):
             print("error")
     if request.method == 'GET':
         if request.GET:
+            #用户数据库添加
             user = models.User()
             user.username = request.GET.get('username')
             user.password = request.GET.get('password')
             user.emailaddress = request.GET.get('email')
             request.session["email"] = user.emailaddress
             user.save()
+            #资产数据库创立
             asset = models.Personal_asset()
             asset.emailaddress = request.GET.get('email')
             asset.stock = 0
             asset.fund = 0
             asset.money = 5000000
             asset.save()
+            info = models.Hist_asset()
+            info.emailaddress = request.GET.get('email')
+            info.stock = 0
+            info.stockprofit = 0
+            info.fund = 0
+            info.fundprofit = 0
+            info.money = 5000000
+            info.save()
     return render(request, 'sign.html')
 
 def newspage(request):
@@ -289,7 +301,7 @@ def showstock(request, stock_code):
 
 def showfund(request, fund_code):
     global code
-    print(code)
+    print(code, fund_code)
     if code != fund_code:
         print('plot')
         fund_code = str(fund_code)
@@ -403,7 +415,7 @@ def showfund(request, fund_code):
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
-                    lastasset = models.Personal_asset.objects.order_by('-pk')[0]
+                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
                     if number <= 0:
                         info = '请输入大于0的数字！'
                         return render(request, 'error.html', {'error': info})
@@ -437,18 +449,16 @@ def showfund(request, fund_code):
                     asset = models.Personal_asset()
                     asset.emailaddress = email
                     asset.stock = lastasset.stock
-                    asset.fund = lastasset.fund - number*float(price[-1])
-                    asset.money = lastasset.money + number*float(price[-1])
+                    asset.fund = lastasset.fund + number*float(price[-1])
+                    asset.money = lastasset.money - number*float(price[-1])
                     asset.save()
-                    #个人资产（每日）
-                    ########
             return render(request, 'buy.html', {'item': fund})
         else:
             if request.method == 'POST':
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
-                    lastasset = models.Personal_asset.objects.order_by('-pk')[0]
+                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
                     if number <= 0:
                         info = '请输入大于0的数字！'
                         return render(request, 'error.html', {'error': info})
@@ -482,9 +492,6 @@ def showfund(request, fund_code):
                     asset.fund = lastasset.fund - number*float(price[-1])
                     asset.money = lastasset.money + number*float(price[-1])
                     asset.save()
-                    #个人资产（每日）
-                    #info = models.Hist_asset()
-                    #info =
             return render(request, 'sell.html', {'item': fund})
     return render(request, 'funddetail.html', {'fund': fund})
 
