@@ -85,6 +85,12 @@ def sign(request):
             user.emailaddress = request.GET.get('email')
             request.session["email"] = user.emailaddress
             user.save()
+            asset = models.Personal_asset()
+            asset.emailaddress = request.GET.get('email')
+            asset.stock = 0
+            asset.fund = 0
+            asset.money = 5000000
+            asset.save()
     return render(request, 'sign.html')
 
 def newspage(request):
@@ -97,10 +103,10 @@ def newspage(request):
     news.title = info.title[1].__str__()
     news.content = info.content[1].__str__()
     news.save()
-    news = models.News.objects.all().order_by('-pk')
-    news1 = models.News.objects.all()[0]
-    news2 = models.News.objects.all()[1]
-    news3 = models.News.objects.all()[2]
+    news = models.News.objects.order_by('-pk')
+    news1 = news[0]
+    news2 = news[1]
+    news3 = news[2]
     news = news[3:]
     return render(request, 'news.html', {'news': news, 'news1': news1, 'news2': news2, 'news3': news3})
 
@@ -282,47 +288,49 @@ def showstock(request, stock_code):
     return render(request, 'stockdetail.html', {'stock': stock})
 
 def showfund(request, fund_code):
-    fund_code = str(fund_code)
-    while len(fund_code) < 6:
-        fund_code = '0' + fund_code
-    r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + fund_code + '.js')
-    pattern0 = re.compile('var fS_name = "(.*?)"')
-    name = re.findall(pattern0, r.text)
-    #print(name, fund_code)
-    pattern1 = re.compile('var syl_1n="(.*?)"')
-    oneyear = re.findall(pattern1, r.text)
-    pattern2 = re.compile('var syl_6y="(.*?)"')
-    sixmonth = re.findall(pattern2, r.text)
-    pattern3 = re.compile('var syl_3y="(.*?)"')
-    threemonth = re.findall(pattern3, r.text)
-    pattern4 = re.compile('var syl_1y="(.*?)"')
-    onemonth = re.findall(pattern4, r.text)
-    pattern5 = re.compile('"y":(.*?),"equityReturn"')
-    price = re.findall(pattern5, r.text)
-    pattern6 = re.compile('"equityReturn":(.*?),"unitMoney"')
-    rate = re.findall(pattern6, r.text)
-    fund = models.Fund()
-    fund.code = fund_code
-    fund.name = name[0]
-    fund.annualrate = oneyear[0]
-    fund.sixmrate = sixmonth[0]
-    fund.threemrate = threemonth[0]
-    fund.onemrate = onemonth[0]
-    fund.price = price[-1]
-    fund.currentrate =  rate[-1]
-    fund.save()
-    pattern = re.compile('var Data_grandTotal = \[(.*?)\];')
-    tmp = re.findall(pattern, r.text)
-    data = tmp[0].split('},{')
-    data[0] = data[0] + '}'
-    data[1] = '{' + data[1] + '}'
-    data[2] = '{' + data[2]
-    funddata = pd.DataFrame(json.loads(data[0]))
-    averagedata = pd.DataFrame(json.loads(data[1]))
-    hsdata = pd.DataFrame(json.loads(data[2]))
-    #画图
     global code
+    print(code)
     if code != fund_code:
+        print('plot')
+        fund_code = str(fund_code)
+        while len(fund_code) < 6:
+            fund_code = '0' + fund_code
+        r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + fund_code + '.js')
+        pattern0 = re.compile('var fS_name = "(.*?)"')
+        name = re.findall(pattern0, r.text)
+        #print(name, fund_code)
+        pattern1 = re.compile('var syl_1n="(.*?)"')
+        oneyear = re.findall(pattern1, r.text)
+        pattern2 = re.compile('var syl_6y="(.*?)"')
+        sixmonth = re.findall(pattern2, r.text)
+        pattern3 = re.compile('var syl_3y="(.*?)"')
+        threemonth = re.findall(pattern3, r.text)
+        pattern4 = re.compile('var syl_1y="(.*?)"')
+        onemonth = re.findall(pattern4, r.text)
+        pattern5 = re.compile('"y":(.*?),"equityReturn"')
+        price = re.findall(pattern5, r.text)
+        pattern6 = re.compile('"equityReturn":(.*?),"unitMoney"')
+        rate = re.findall(pattern6, r.text)
+        fund = models.Fund()
+        fund.code = fund_code
+        fund.name = name[0]
+        fund.annualrate = oneyear[0]
+        fund.sixmrate = sixmonth[0]
+        fund.threemrate = threemonth[0]
+        fund.onemrate = onemonth[0]
+        fund.price = price[-1]
+        fund.currentrate =  rate[-1]
+        fund.save()
+        pattern = re.compile('var Data_grandTotal = \[(.*?)\];')
+        tmp = re.findall(pattern, r.text)
+        data = tmp[0].split('},{')
+        data[0] = data[0] + '}'
+        data[1] = '{' + data[1] + '}'
+        data[2] = '{' + data[2]
+        funddata = pd.DataFrame(json.loads(data[0]))
+        averagedata = pd.DataFrame(json.loads(data[1]))
+        hsdata = pd.DataFrame(json.loads(data[2]))
+        #画图
         time = []
         rate = []
         for item in funddata['data']:
@@ -374,7 +382,7 @@ def showfund(request, fund_code):
         code = fund_code
     if request.method == 'POST':
         email = request.session.get("email")
-        print(email)
+        #print(email)
         if email is None:
             info = '请先登录！'
             return render(request, 'error.html', {'error': info})
@@ -394,6 +402,15 @@ def showfund(request, fund_code):
             if request.method == 'POST':
                 if request.POST.get('number'):
                     number = request.POST.get('number')
+                    number = float(number)
+                    lastasset = models.Personal_asset.objects.order_by('-pk')[0]
+                    if number <= 0:
+                        info = '请输入大于0的数字！'
+                        return render(request, 'error.html', {'error': info})
+                    if number*float(price[-1]) > lastasset.money:
+                        info = '您没有足够的余额！'
+                        return render(request, 'error.html', {'error': info})
+                    #own
                     try:
                         own = models.Own.objects.get(emailaddress=email, name=name[0])
                     except:
@@ -405,55 +422,69 @@ def showfund(request, fund_code):
                         own.volume = number
                         own.save()
                     else:
-                        own.buy = (float(own.volume)*float(own.buy) + float(number)*float(price[-1]))/(float(own.volume) + float(number))
-                        own.volume += float(number)
+                        own.buy = (float(own.volume)*float(own.buy) + number*float(price[-1]))/(float(own.volume) + number)
+                        own.volume += number
                         own.save()
-                    #对历史交易的处理：own  info  hist
-                    try:
-                        hist = models.Hist_trade.objects.get(emailaddress=email, name=name[0])
-                    except:
-                        hist = models.Hist_trade()
-                        hist.emailaddress = email
-                        hist.price = price[-1]
-                        hist.code = fund_code
-                        hist.name = name[0]
-                        hist.volume = number
-                        hist.time = models.DateTimeField(default=datetime.now)
-                        hist.save()
-                    else:
-                        hist.price = (own.volume*own.buy + number*price[-1])/(own.volume + number)
-                        hist.volume = number
-                        hist.save()
-                    #info
-                    try:
-                        info = models.Hist_asset.objects.get(emailaddress=email, name=name[0])
-                    except:
-                        info = models.Hist_trade()
-                        info.emailaddress = email
-                        info.fund+=number*price[-1]
-                        info.money-=number*price[-1]
-                        info.time = models.DateTimeField(default=datetime.now)
-                        info.save()
-                    else:
-                        info.price = (own.volume*own.buy + number*price[-1])/(own.volume + number)
-                        info.volume = number
-                        info.save()
+                    #对历史交易的处理：hist
+                    hist = models.Hist_trade()
+                    hist.emailaddress = email
+                    hist.price = price[-1]
+                    hist.code = fund_code
+                    hist.name = name[0]
+                    hist.volume = number
+                    hist.save()
+                    #个人资产（按操作）
+                    asset = models.Personal_asset()
+                    asset.emailaddress = email
+                    asset.stock = lastasset.stock
+                    asset.fund = lastasset.fund - number*float(price[-1])
+                    asset.money = lastasset.money + number*float(price[-1])
+                    asset.save()
+                    #个人资产（每日）
+                    ########
             return render(request, 'buy.html', {'item': fund})
         else:
             if request.method == 'POST':
                 if request.POST.get('number'):
                     number = request.POST.get('number')
+                    number = float(number)
+                    lastasset = models.Personal_asset.objects.order_by('-pk')[0]
+                    if number <= 0:
+                        info = '请输入大于0的数字！'
+                        return render(request, 'error.html', {'error': info})
+                    #own
                     try:
                         own = models.Own.objects.get(emailaddress=email, name=name[0])
                     except:
-                        info = '卖出量大于持有数量！'
+                        info = '无法卖出不持有的基金！'
                         return render(request, 'error.html', {'error': info})
                     else:
-                        if float(own.volume) < float(number):
+                        if float(own.volume) < number:
                             info = '卖出量大于持有数量！'
                             return render(request, 'error.html', {'error': info})
-                        if float(own.volume) == float(number):
-                            pass
+                        elif float(own.volume) == number:
+                            own.delete()
+                        else:
+                            own.volume = float(own.volume) - number
+                            own.save()
+                    #对历史交易的处理：hist
+                    hist = models.Hist_trade()
+                    hist.emailaddress = email
+                    hist.price = price[-1]
+                    hist.code = fund_code
+                    hist.name = name[0]
+                    hist.volume = 0 - number
+                    hist.save()
+                    #个人资产（按操作）
+                    asset = models.Personal_asset()
+                    asset.emailaddress = email
+                    asset.stock = lastasset.stock
+                    asset.fund = lastasset.fund - number*float(price[-1])
+                    asset.money = lastasset.money + number*float(price[-1])
+                    asset.save()
+                    #个人资产（每日）
+                    #info = models.Hist_asset()
+                    #info =
             return render(request, 'sell.html', {'item': fund})
     return render(request, 'funddetail.html', {'fund': fund})
 

@@ -77,23 +77,23 @@ class Hist_trade(models.Model):
     name = models.CharField(max_length=30)      #名字
     volume = models.FloatField()      #交易量
     price = models.FloatField()       #交易价格
-    time = models.DateTimeField()         #交易时间
+    time = models.DateTimeField(auto_now_add=True)         #交易时间
 
 #按操作结算资产
-class Prosenal_asset(models.Model):
+class Personal_asset(models.Model):
+    emailaddress = models.EmailField()  #邮箱
+    stock = models.FloatField()       #股票资产
+    fund = models.FloatField()        #基金资产
+    money = models.FloatField()       #现金资产
+    time = models.DateTimeField(auto_now_add=True)         #交易时间
+
+#按日结算资产
+class Hist_asset(models.Model):
     emailaddress = models.EmailField()  #邮箱
     stock = models.FloatField()       #股票资产
     stockprofit = models.FloatField() #股票收益
     fund = models.FloatField()        #基金资产
     fundprofit = models.FloatField()  #基金收益
     money = models.FloatField()       #现金资产
-    time = models.TimeField()         #交易时间
-
-#按日结算资产
-class Hist_asset(models.Model):
-    emailaddress = models.EmailField()  #邮箱
-    stock = models.FloatField()       #股票资产
-    fund = models.FloatField()        #基金资产
-    money = models.FloatField()       #现金资产
-    time = models.TimeField()         #交易时间
+    time = models.DateField(auto_now_add=True)         #交易时间
 

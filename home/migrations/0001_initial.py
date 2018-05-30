@@ -26,29 +26,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Hist_asset',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('emailaddress', models.EmailField(max_length=254)),
-                ('stock', models.FloatField()),
-                ('fund', models.FloatField()),
-                ('money', models.FloatField()),
-                ('time', models.TimeField()),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Hist_trade',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('emailaddress', models.EmailField(max_length=254)),
-                ('code', models.CharField(max_length=6)),
-                ('name', models.CharField(max_length=30)),
-                ('volume', models.FloatField()),
-                ('price', models.FloatField()),
-                ('time', models.DateTimeField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='News',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -65,19 +42,6 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=30)),
                 ('volume', models.FloatField()),
                 ('buy', models.FloatField()),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Prosenal_asset',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('emailaddress', models.EmailField(max_length=254)),
-                ('stock', models.FloatField()),
-                ('stockprofit', models.FloatField()),
-                ('fund', models.FloatField()),
-                ('fundprofit', models.FloatField()),
-                ('money', models.FloatField()),
-                ('time', models.TimeField()),
             ],
         ),
         migrations.CreateModel(
