@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from . import models
@@ -16,8 +18,6 @@ from email.utils import parseaddr, formataddr
 import smtplib
 from PIL import Image
 from io import BytesIO
-import matplotlib
-matplotlib.use('Agg')
 pd.set_option('max_colwidth', 20000)
 
 code = '123456'
@@ -75,6 +75,8 @@ def sign(request):
                     #return render(request, 'error.html', {'error': info})
                 else:
                     request.session["email"] = email
+                    username = user.username
+                    request.session["username"] = username
                     print('登录成功。')
                     #return render(request, 'index.html')
         else:
@@ -278,10 +280,19 @@ def showstock(request, stock_code):
             fav.name = stockdatasplit[0][21:]
             fav.rate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
             fav.save()
-        else:
+        elif request.POST.__contains__('buy'):
             if request.method == 'POST':
                 if request.POST.get('number'):
                     number = request.POST.get('number')
+                    number = float(number)
+                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
+                    if number <= 0:
+                        info = '请输入大于0的数字！'
+                        return render(request, 'error.html', {'error': info})
+                    if number*float(stockdatasplit[3]) > lastasset.money:
+                        info = '您没有足够的余额！'
+                        return render(request, 'error.html', {'error': info})
+                    #own
                     try:
                         own = models.Own.objects.get(emailaddress=email, name=stockdatasplit[0][21:])
                     except:
@@ -293,10 +304,65 @@ def showstock(request, stock_code):
                         own.volume = number
                         own.save()
                     else:
-                        own.buy = (float(own.volume)*float(own.buy) + float(number)*float(stockdatasplit[3]))/(float(own.volume) + float(number))
-                        own.volume += float(number)
+                        own.buy = (float(own.volume)*float(own.buy) + number*float(stockdatasplit[3]))/(float(own.volume) + number)
+                        own.volume += number
                         own.save()
+                    #对历史交易的处理：hist
+                    hist = models.Hist_trade()
+                    hist.emailaddress = email
+                    hist.price = stockdatasplit[3]
+                    hist.code = stock_code
+                    hist.name = stockdatasplit[0][21:]
+                    hist.volume = number
+                    hist.save()
+                    #个人资产（按操作）
+                    asset = models.Personal_asset()
+                    asset.emailaddress = email
+                    asset.stock = lastasset.stock + number*float(stockdatasplit[3])
+                    asset.fund = lastasset.fund
+                    asset.money = lastasset.money - number*float(stockdatasplit[3])
+                    asset.save()
             return render(request, 'buy.html', {'item': stock})
+        else:
+            if request.method == 'POST':
+                if request.POST.get('number'):
+                    number = request.POST.get('number')
+                    number = float(number)
+                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
+                    if number <= 0:
+                        info = '请输入大于0的数字！'
+                        return render(request, 'error.html', {'error': info})
+                    #own
+                    try:
+                        own = models.Own.objects.get(emailaddress=email, name=stockdatasplit[0][21:])
+                    except:
+                        info = '无法卖出不持有的基金！'
+                        return render(request, 'error.html', {'error': info})
+                    else:
+                        if float(own.volume) < number:
+                            info = '卖出量大于持有数量！'
+                            return render(request, 'error.html', {'error': info})
+                        elif float(own.volume) == number:
+                            own.delete()
+                        else:
+                            own.volume = float(own.volume) - number
+                            own.save()
+                    #对历史交易的处理：hist
+                    hist = models.Hist_trade()
+                    hist.emailaddress = email
+                    hist.price = stockdatasplit[3]
+                    hist.code = stock_code
+                    hist.name = stockdatasplit[0][21:]
+                    hist.volume = 0 - number
+                    hist.save()
+                    #个人资产（按操作）
+                    asset = models.Personal_asset()
+                    asset.emailaddress = email
+                    asset.stock = lastasset.stock - number*float(stockdatasplit[3])
+                    asset.fund = lastasset.fund
+                    asset.money = lastasset.money + number*float(stockdatasplit[3])
+                    asset.save()
+            return render(request, 'sell.html', {'item': stock})
     return render(request, 'stockdetail.html', {'stock': stock})
 
 def showfund(request, fund_code):
@@ -415,7 +481,7 @@ def showfund(request, fund_code):
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
-                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
+                    lastasset = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
                     if number <= 0:
                         info = '请输入大于0的数字！'
                         return render(request, 'error.html', {'error': info})
@@ -458,7 +524,7 @@ def showfund(request, fund_code):
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
-                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
+                    lastasset = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
                     if number <= 0:
                         info = '请输入大于0的数字！'
                         return render(request, 'error.html', {'error': info})
@@ -498,54 +564,172 @@ def showfund(request, fund_code):
 def error(request):
     return render(request, 'error.html')
 
-def showinfo(request):
-    email = request.session.get("email")
-    # print(email)
-    if email is None:
-        info = '请先登录！'
-        return render(request, 'error.html', {'error': info})
-    try:
-        info = models.Hist_asset.objects.get(emailaddress=email)
-    except:
-        info = []
-    return render(request, 'favourite.html', {'info': info})
-
 def favourite(request):
     email = request.session.get("email")
+    username = request.session.get("username")
     #print(email)
     if email is None:
         info = '请先登录！'
         return render(request, 'error.html', {'error': info})
     try:
-        favF = models.FavouriteFund.objects.get(emailaddress=email)
+        favF = models.FavouriteFund.objects.filter(emailaddress=email)
     except:
         favF = []
     try:
-        favS = models.FavouriteStock.objects.get(emailaddress=email)
+        favS = models.FavouriteStock.objects.filter(emailaddress=email)
     except:
         favS = []
-    return render(request, 'favourite.html', {'favF': favF, 'favS': favS})
+    return render(request, 'favorite.html', {'favF': favF, 'favS': favS, 'username': username, 'email': email})
 
 def showown(request):
     email = request.session.get("email")
+    username = request.session.get("username")
     # print(email)
     if email is None:
         info = '请先登录！'
         return render(request, 'error.html', {'error': info})
     try:
-        own = models.Own.objects.get(emailaddress=email)
+        own = models.Own.objects.filter(emailaddress=email)
     except:
         own = []
-    return render(request, 'own.html', {'own': own})
+    return render(request, 'own.html', {'own': own, 'username': username, 'email': email})
 
 def showhist(request):
     email = request.session.get("email")
+    username = request.session.get("username")
     # print(email)
+    alterasset()
     if email is None:
         info = '请先登录！'
         return render(request, 'error.html', {'error': info})
     try:
-        hist = models.Hist_trade.objects.get(emailaddress=email)
+        hist = models.Hist_trade.objects.filter(emailaddress=email)
     except:
         hist = []
-    return render(request, 'hist.html', {'hist': hist})
+    return render(request, 'record.html', {'hist': hist, 'username': username, 'email': email})
+
+def alterasset():
+    emails = models.User.objects.values_list('emailaddress')
+    for email in emails:
+        email = email[0]
+        asset = models.Hist_asset()
+        asset.emailaddress = email
+        asset.fund = 0
+        asset.stock = 0
+        pfund = 0
+        pstock = 0
+        own = models.Own.objects.filter(emailaddress=email)
+        for item in own:
+            if len(item.name) > 4:
+                print(item.name)
+                r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + item.code + '.js')
+                pattern = re.compile('"y":(.*?),"equityReturn"')
+                pricelist = re.findall(pattern, r.text)
+                price = pricelist[-1]
+                print(price)
+                asset.fund += float(price) * float(item.volume)
+                pfund += float(item.buy) * float(item.volume)
+            else:
+                #price = 0
+                stockdata = requests.get('http://hq.sinajs.cn/list=sh' + item.code)
+                stockdatasplit = stockdata.text.split(',')
+                if (len(stockdata.text) == 24):
+                    stockdata = requests.get('http://hq.sinajs.cn/list=sz' + item.code)
+                    stockdatasplit = stockdata.text.split(',')
+                    price = stockdatasplit[3]
+                else:
+                    price = stockdatasplit[3]
+                asset.stock += float(price) * float(item.volume)
+                pstock += float(item.buy) * float(item.volume)
+        print(asset.fund)
+        if pfund != 0:
+            asset.fundprofit = (asset.fund - pfund) / pfund * 100
+        else:
+            asset.fundprofit = 0
+        if pstock != 0:
+            asset.stockprofit = (asset.stock - pstock) / pstock * 100
+        else:
+            asset.stockprofit = 0
+        lastasset = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
+        asset.money = lastasset.money
+        asset.save()
+
+def showasset(request):
+    email = request.session.get("email")
+    username = request.session.get("username")
+    if email is None:
+        info = '请先登录！'
+        return render(request, 'error.html', {'error': info})
+    info = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
+    return render(request, 'asset.html', {'info': info, 'username': username, 'email': email})
+
+def showprofit(request):
+    email = request.session.get("email")
+    username = request.session.get("username")
+    if email is None:
+        info = '请先登录！'
+        return render(request, 'error.html', {'error': info})
+    info = models.Hist_asset.objects.filter(emailaddress=email)
+    return render(request, 'profit.html', {'username': username, 'email': email})
+
+def search(request, code):
+    stock_code = code
+    stockdata = requests.get('http://hq.sinajs.cn/list=sh' + stock_code)
+    stockdatasplit = stockdata.text.split(',')
+    if (len(stockdata.text) == 24):
+        stockdata = requests.get('http://hq.sinajs.cn/list=sz' + stock_code)
+        stockdatasplit = stockdata.text.split(',')
+        stock = models.Stock()
+        stock.code = stock_code
+        stock.name = stockdatasplit[0][21:]
+        stock.open = stockdatasplit[1]
+        stock.close = stockdatasplit[2]
+        if float(stock.close) == 0:
+            pass
+        else:
+            showstock(request,code)
+    else:
+        stock = models.Stock()
+        stock.code = stock_code
+        stock.name = stockdatasplit[0][21:]
+        stock.open = stockdatasplit[1]
+        stock.close = stockdatasplit[2]
+        if float(stock.close) == 0:
+            pass
+        else:
+            showstock(request,code)
+
+    fund_code = code
+    while len(fund_code) < 6:
+        fund_code = '0' + fund_code
+    r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + fund_code + '.js')
+    pattern0 = re.compile('var fS_name = "(.*?)"')
+    name = re.findall(pattern0, r.text)
+    if len(name)==0:
+        info = '代码错误！'
+        return render(request, 'error.html', {'error': info})
+    else:
+        showfund(request,code)
+
+def recharge(request):
+    email = request.session.get("email")
+    username = request.session.get("username")
+    if email is None:
+        info = '请先登录！'
+        return render(request, 'error.html', {'error': info})
+    if request.method == 'POST':
+        if request.POST.get('number'):
+            number = request.POST.get('number')
+            number = float(number)
+            lastasset = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
+            if number <= 0:
+                info = '请输入大于0的数字！'
+                return render(request, 'error.html', {'error': info})
+            # 个人资产（按操作）
+            asset = models.Personal_asset()
+            asset.emailaddress = email
+            asset.stock = lastasset.stock
+            asset.fund = lastasset.fund
+            asset.money = lastasset.money + number
+            asset.save()
+    return render(request, 'recharge.html', {'username': username, 'email': email})

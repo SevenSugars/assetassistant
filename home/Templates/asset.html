@@ -1,0 +1,252 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>理财小助手-个人中心</title>
+    <!-- Favicon
+    <link rel="icon" href="{% static 'personal/favicon.ico' %}" type="image/x-icon">
+    -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="{% static 'personal/plugins/bootstrap/css/bootstrap.css' %} " rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="{% static 'personal/plugins/node-waves/waves.css' %} " rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="{% static 'personal/plugins/animate-css/animate.css' %} " rel="stylesheet" />
+
+    <!-- Morris Chart Css-->
+    <link href="{% static 'personal/plugins/morrisjs/morris.css' %} " rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="{% static 'personal/css/style.css' %} " rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{% static 'personal/css/themes/all-themes.css' %} " rel="stylesheet" />
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar
+    <div class="search-bar">
+        <div class="search-icon">
+            <i class="material-icons">search</i>
+        </div>
+        <input type="text" placeholder="START TYPING...">
+        <div class="close-search">
+            <i class="material-icons">close</i>
+        </div>
+    </div> -->
+    <!-- #END# Search Bar -->
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand" href="http://127.0.0.1:8000/">理财小助手</a>
+            </div>
+
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ username }}</div>
+                    <div class="email">{{ email }}</div>
+                    <div class="btn-group user-helper-dropdown">
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="http://127.0.0.1:8000/account"><i class="material-icons">input</i>登出</a></li> <!--修改-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">导航栏</li>
+                    <li>
+                        <a href="http://127.0.0.1:8000/">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="http://127.0.0.1:8000/news/"> <!-- 修改-->
+                            <i class="material-icons">public</i>
+                            <span>新闻</span>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="http://127.0.0.1:8000/recommend/">
+                            <i class="material-icons">collections</i>
+                            <span>推荐</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">person</i>
+                            <span>个人</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li >
+                                <a href="http://localhost:8000/home/favourite" > <!--修改-->
+                                    <span>收藏</span>
+                                </a>
+                            </li>
+                            <li >
+                                <a href="http://localhost:8000/home/own" > <!--修改-->
+                                    <span>当前持有</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://localhost:8000/home/hist">
+                                    <span>交易记录</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/asset">
+                                    <span>当前资产</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/profit">
+                                    <span>历史收益</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/recharge">
+                                    <span>充值</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <div class="legal">
+                <div class="copyright">
+                    &copy; 2018 <a href="javascript:void(0);">理财小助手</a>.
+                </div>
+                <div class="version">
+                    <b>Version: </b> 1.0.0
+                </div>
+            </div>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>当前资产</h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="info-box hover-expand-effect">
+                        <div class="icon bg-red">
+                            <i class="material-icons">equalizer</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">股票</div>
+                            <div class="number">￥{{ info.stock }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="info-box hover-expand-effect">
+                        <div class="icon bg-pink">
+                            <i class="material-icons">show_chart</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">基金</div>
+                            <div class="number">￥{{ info.fund }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row clearfix">
+                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="info-box hover-expand-effect">
+                        <div class="icon bg-orange">
+                            <i class="material-icons">multiline_chart</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">现金</div>
+                            <div class="number">￥{{ info.money }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Hover Expand Effect -->
+
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script  src="{% static 'personal/plugins/jquery/jquery.min.js' %} "></script>
+
+    <!-- Bootstrap Core Js -->
+    <script  src="{% static 'personal/plugins/bootstrap/js/bootstrap.js' %} "></script>
+
+    <!-- Select Plugin Js -->
+    <script  src="{% static 'personal/plugins/bootstrap-select/js/bootstrap-select.js' %} "></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script  src="{% static 'personal/plugins/jquery-slimscroll/jquery.slimscroll.js' %} "></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script  src="{% static 'personal/plugins/node-waves/waves.js' %} "></script>
+
+    <!-- Jquery CountTo Plugin Js -->
+    <script  src="{% static 'personal/plugins/jquery-countto/jquery.countTo.js' %} "></script>
+
+    <!-- Sparkline Chart Plugin Js -->
+    <script  src="{% static 'personal/plugins/jquery-sparkline/jquery.sparkline.js' %} "></script>
+
+    <!-- Custom Js -->
+    <script  src="{% static 'personal/js/admin.js' %} "></script>
+    <script  src="{% static 'personal/js/pages/widgets/infobox/infobox-1.js' %} "></script>
+
+    <!-- Demo Js -->
+    <script  src="{% static 'personal/js/demo.js' %} "></script>
+
+</body>
+
+</html>
