@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Animations | Bootstrap Based Admin Template - Material Design</title>
+    <title>理财小助手-基金</title>
     <!-- Favicon-->
     <link rel="icon" href="{% static 'recommend/favicon.ico'%}" type="image/x-icon">
 
@@ -74,8 +74,8 @@
             <!-- User Info -->
             <div class="user-info">
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">John Doe</div>
-                    <div class="email">john.doe@example.com</div>
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ username }}</div>
+                    <div class="email">{{ email }}</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -90,21 +90,27 @@
                 <ul class="list">
                     <li class="header">导航栏</li>
                     <li>
-                        <a href="index.html">
+                        <a href="http://127.0.0.1:8000/">
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>
                     </li>
                     <li >
-                        <a href="#新闻"> <!-- 修改-->
+                        <a href="http://127.0.0.1:8000/news/"> <!-- 修改-->
                             <i class="material-icons">public</i>
                             <span>新闻</span>
                         </a>
                     </li>
                     <li >
-                        <a href="#推荐">
+                        <a href="http://127.0.0.1:8000/recommend/">
                             <i class="material-icons">collections</i>
                             <span>推荐</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://127.0.0.1:8000/tutorial">
+                            <i class="material-icons">library_books</i>
+                            <span>教程</span>
                         </a>
                     </li>
                     <li class="active">
@@ -114,27 +120,32 @@
                         </a>
                         <ul class="ml-menu">
                             <li >
-                                <a href="http://localhost:8000/log/person/favorite" > <!--修改-->
+                                <a href="http://localhost:8000/home/favourite" > <!--修改-->
                                     <span>收藏</span>
                                 </a>
                             </li>
+                            <li >
+                                <a href="http://localhost:8000/home/own" > <!--修改-->
+                                    <span>当前持有</span>
+                                </a>
+                            </li>
                             <li>
-                                <a href="http://localhost:8000/log/person/favorite">
+                                <a href="http://localhost:8000/home/hist">
                                     <span>交易记录</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="http://127.0.0.1:8000/home/asset">
                                     <span>当前资产</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="http://127.0.0.1:8000/home/profit">
                                     <span>历史收益</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="http://127.0.0.1:8000/home/recharge">
                                     <span>充值</span>
                                 </a>
                             </li>
@@ -162,7 +173,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="{% static 'recommend/index.html">ADMINBSB - MATERIAL DESIGN</a>
+                <a class="navbar-brand" href="http://127.0.0.1:8000/">理财小助手</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
 
@@ -187,7 +198,7 @@
 
                         </div>
                         <div class="body">
-                            <img src="{% static 'funddetail/img/fund.png'%}" class="js-animating-object img-responsive">
+                            <img src="{% static '/fund.png'%}" class="js-animating-object img-responsive">
                             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                 <div class="info-box bg-red">
                                     <div class="icon">
