@@ -1,7 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core import serializers
 from . import models
 import tushare as ts
 import pandas as pd
@@ -126,7 +126,8 @@ def newspage(request):
 
 def shownews(request, news_id):
     news = models.News.objects.get(pk=news_id)
-    return render(request, 'newsdetail.html', {'news': news})
+    allnews = models.News.objects.order_by('-pk')[:5]
+    return render(request, 'newsdetail.html', {'news': news, 'allnews': allnews})
 
 def recommend(request):
     #基金
@@ -597,6 +598,7 @@ def error(request):
 def favourite(request):
     email = request.session.get("email")
     username = request.session.get("username")
+    print(username)
     #print(email)
     if email is None:
         info = '请先登录！'
@@ -700,7 +702,9 @@ def showprofit(request):
         info = '请先登录！'
         return render(request, 'error.html', {'error': info})
     info = models.Hist_asset.objects.filter(emailaddress=email)
-    return render(request, 'profit.html', {'username': username, 'email': email})
+    info = serializers.serialize("json", info)
+    #print(info)
+    return render(request, 'profit.html', {'info': info, 'username': username, 'email': email})
 
 def search(request, code):
     stock_code = code

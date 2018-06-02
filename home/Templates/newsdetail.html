@@ -110,12 +110,10 @@ http://www.cssmoban.com/tm-488-classic
                             <nav>
                                 <ul class="nav">
 
-                                    <li><a href="#" class="tm-text-link">Tincidunt non faucibus placerat</a></li>
-                                    <li><a href="#" class="tm-text-link">Vestibulum tempor ac lectus</a></li>
-                                    <li><a href="#" class="tm-text-link">Elementum egestas dui</a></li>
-                                    <li><a href="#" class="tm-text-link">Nam in augue consectetur</a></li>
-                                    <li><a href="#" class="tm-text-link">Fusce non turpis euismod</a></li>
-                                    <li><a href="#" class="tm-text-link">Text Link Color #006699</a></li>
+                                    {% for item in allnews %}
+                                        <li><a href="/news/{{ item.id }}" class="tm-text-link">{{ item.title }}</a></li>
+                                    {% endfor %}
+
                                 </ul>
                             </nav>
 
