@@ -1,21 +1,380 @@
+﻿{% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Jquery DataTable | Bootstrap Based Admin Template - Material Design</title>
+    <!-- Favicon-->
+    <link rel="icon" href="{% static 'recommend/favicon.ico'%}" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="{% static 'recommend/plugins/bootstrap/css/bootstrap.css'%}" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="{% static 'recommend/plugins/node-waves/waves.css'%}" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="{% static 'recommend/plugins/animate-css/animate.css'%}" rel="stylesheet" />
+
+    <!-- JQuery DataTable Css -->
+    <link href="{% static 'recommend/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css'%}" rel="stylesheet">
+
+    <!-- Custom Css -->
+    <link href="{% static 'recommend/css/style.css'%}" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{% static 'recommend/css/themes/all-themes.css'%}" rel="stylesheet" />
 </head>
-<body>
 
-{% for item in recF %}
-    <a href="/fund/{{ item.code }}">{{ item.name }}</a>
-    <h4>{{ item.annualrate }}%</h4>
-    <br/>
-{% endfor %}
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <div class="search-icon">
+            <i class="material-icons">search</i>
+        </div>
+        <input type="text" placeholder="START TYPING...">
+        <div class="close-search">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+    <!-- #END# Search Bar -->
+    <!-- Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">John Doe</div>
+                    <div class="email">john.doe@example.com</div>
+                    <div class="btn-group user-helper-dropdown">
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="#登录页连接"><i class="material-icons">input</i>登出</a></li> <!--修改-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">导航栏</li>
+                    <li>
+                        <a href="http://127.0.0.1:8000/">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="http://127.0.0.1:8000/news/"> <!-- 修改-->
+                            <i class="material-icons">public</i>
+                            <span>新闻</span>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="http://127.0.0.1:8000/recommend/">
+                            <i class="material-icons">collections</i>
+                            <span>推荐</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://127.0.0.1:8000/tutorial">
+                            <i class="material-icons">library_books</i>
+                            <span>教程</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">person</i>
+                            <span>个人</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li >
+                                <a href="http://localhost:8000/home/favourite" > <!--修改-->
+                                    <span>收藏</span>
+                                </a>
+                            </li>
+                            <li >
+                                <a href="http://localhost:8000/home/own" > <!--修改-->
+                                    <span>当前持有</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://localhost:8000/home/hist">
+                                    <span>交易记录</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/asset">
+                                    <span>当前资产</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/profit">
+                                    <span>历史收益</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/recharge">
+                                    <span>充值</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <div class="legal">
+                <div class="copyright">
+                    &copy; 2018 <a href="javascript:void(0);">理财小助手</a>.
+                </div>
+                <div class="version">
+                    <b>Version: </b> 1.0.0
+                </div>
+            </div>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
 
-{% for item in recS %}
-    <a href="/stock/{{ item.code }}">{{ item.name }}</a>
-    <h4>{{ item.rate }}%</h4>
-    <br/>
-{% endfor %}
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand" href="{% static 'recommend/index.html">ADMINBSB - MATERIAL DESIGN</a>
+            </div>
+
+        </div>
+    </nav>
+
+
+<section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>
+                    基金、股票推荐
+                </h2>
+            </div>
+            <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+
+                        <div class="body">
+                            <div id="carousel-example-generic_2" class="carousel slide" data-ride="carousel">
+                                <!-- Indicators -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#carousel-example-generic_2" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carousel-example-generic_2" data-slide-to="1"></li>
+                                </ol>
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="item active">
+                                        <img src="{% static 'recommend/images/image-gallery/10_1.jpg'%}" />
+                                        <div class="carousel-caption">
+
+                                            <p>我们推荐的基金来源于近1年来收益率最高的股票型基金、混合型基金、债券型基金、指数型基金和QDII基金。
+</p>
+                                            <p>一切推荐仅供参考，风险自负。
+</p>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="{% static 'recommend/images/image-gallery/12_1.jpg'%}" />
+                                        <div class="carousel-caption">
+                                            <p>我们推荐的股票来源于当日股票龙虎榜靠前的股票，并提供了他的今日涨跌幅。</p>
+                                            <p>一切推荐仅供参考，风险自负。</p>
+                                        </div>
+                                    </div>
+
+                                <!-- Controls -->
+                                <a class="left carousel-control" href="#carousel-example-generic_2" role="button" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="right carousel-control" href="#carousel-example-generic_2" role="button" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Basic Examples -->
+            <div class="row clearfix">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                基金推荐
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>代码</th>
+                                            <th>名称</th>
+                                            <th>年日化</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>代码</th>
+                                            <th>名称</th>
+                                            <th>年日化</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for item in recF %}
+                                        <tr>
+                                            <td>{{ item.code }}</td>
+                                            <td><a href="/fund/{{ item.code }}">{{ item.name }}</a></td>
+                                            <td>{{ item.annualrate }}%</td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                股票推荐
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>代码</th>
+                                            <th>名称</th>
+                                            <th>日涨跌</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>代码</th>
+                                            <th>名称</th>
+                                            <th>日涨跌</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for item in recS %}
+                                        <tr>
+                                            <td>{{ item.code }}</td>
+                                            <td><a href="/stock/{{ item.code }}">{{ item.name }}</a></td>
+                                            <td>{{ item.rate }}%</td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Basic Examples -->
+            <!-- Basic Examples -->
+            <div class="row clearfix">
+
+            </div>
+            <!-- #END# Basic Examples -->
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="{% static 'recommend/plugins/jquery/jquery.min.js'%}"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'recommend/plugins/bootstrap/js/bootstrap.js'%}"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="{% static 'recommend/plugins/bootstrap-select/js/bootstrap-select.js'%}"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'recommend/plugins/jquery-slimscroll/jquery.slimscroll.js'%}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'recommend/plugins/node-waves/waves.js'%}"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="{% static 'recommend/plugins/jquery-datatable/jquery.dataTables.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/extensions/export/buttons.flash.min.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/extensions/export/jszip.min.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/extensions/export/pdfmake.min.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/extensions/export/vfs_fonts.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/extensions/export/buttons.html5.min.js'%}"></script>
+    <script src="{% static 'recommend/plugins/jquery-datatable/extensions/export/buttons.print.min.js'%}"></script>
+
+    <!-- Custom Js -->
+    <script src="{% static 'recommend/js/admin.js'%}"></script>
+    <script src="{% static 'recommend/js/pages/tables/jquery-datatable.js'%}"></script>
+
+    <!-- Demo Js -->
+    <script src="{% static 'recommend/js/demo.js'%}"></script>
 </body>
+
 </html>

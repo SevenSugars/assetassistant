@@ -1,0 +1,163 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!--补充了creative的meta-->
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+
+    <title>Classic - Blog Page</title>
+	<!--需要修改吗-->
+<!--
+Classic Template
+http://www.cssmoban.com/tm-488-classic
+-->
+    <!-- load stylesheets -->
+    <link rel="stylesheet" href="http://fonts.useso.com/css?family=Open+Sans:300,400">  <!-- Google web font "Open Sans" -->
+	<!--下面一行修改了地址到vendor-->
+    <link href="{% static 'bloglist/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">                                      <!-- Bootstrap style -->
+	<!--给creative的css文件夹中添加了下面的css-->
+    <link rel="stylesheet" href="{% static 'bloglist/css/templatemo-style.css'%}">                                   <!-- Templatemo style -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+          <![endif]-->
+
+	<!--补充了creative的link-->
+	<!-- Custom fonts for this template -->
+    <link href="{% static 'bloglist/vendor/font-awesome/css/font-awesome.min.css'%}" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link href="{% static 'bloglist/vendor/magnific-popup/magnific-popup.css'%}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'bloglist/css/creative.min.css'%}" rel="stylesheet">
+
+</head>
+
+    <body id="page-top">
+       
+        <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">理财小助手</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://127.0.0.1:8000/">首页</a> <!--修改-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/recommend/">推荐</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/news/">新闻</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/tutorial/">教程</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/home/favourite/">个人</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/account/">登录</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+        <div class="tm-contact-img-container">
+            
+        </div>
+
+        <section class="tm-section">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 col-xl-9">
+                        <div class="tm-blog-post">
+                            <h3 class="tm-gold-text">公司债券与股票有哪些区别？</h3>
+                            <p>债券和股票作为有价证券，却是一种虚拟资本，是筹集社会资本，起到将闲置资金投入生产和建设资金的作用。并且股票和债券都可以在市场上流通，投资者可以通过投资股票和债券获得相应的回报。经管同为有价证券，债券与股票的区别也很明显，那么公司债券与股票有哪些区别呢？<br/><img src="http://www.365caidashi.com/uploads/image/20180316/1521187006368564.png" title="债券与股票有哪些区别.png" alt="债券与股票有哪些区别.png" width="450" height="300"/></p><p><strong style="font-size: 16px; line-height: 18px; font-weight: bold;">一、公司债券与股票融资性质不同</strong></p><p>债券是一种债权和债务的关系证明，它反映了发行人与投资者之间的关系。投资者是债权人，发行债券募集的资金列入发行人的债务中。股票是一种所有权凭证，反映了股东和投资企业之间的所有权关系，投资者是公司的股东，发行股票所筹集的资金列入公司的资产。</p><p>由于融资的性质不同，投资者拥有的权利也不同。债券投资者不能参与发行公司的经营管理活动，只能要求公司债券的发行人按期偿还本金和利息。股票持有人作为公司的股东，有权参加股东大会，参与公司的经营管理活动和利润分配。</p><p><strong style="font-size: 16px; line-height: 18px; font-weight: bold;">二、公司债券与股票的存续期限不同</strong></p><p>公司债券通常都是有一定的投资时间限制的，投资期限通常在发行之前确定，公司在一定期限内进行偿还。股票是一种没有期限的可转让有价证券，企业不需要偿还，投资者只能进行转让，不能退股。企业唯一能对股票投资者进行偿还的情况是：如果企业破产，并且相关债务已经偿还，公司根据资产清算的结果，投资者可以获得部分补偿。相反，只要发行股票的公司不被清算，那么股票就永远不会被偿还。<br/><img src="http://www.365caidashi.com/uploads/image/20180316/1521187026488030.png" title="公司债券与股票的存续期限.png" alt="公司债券与股票的存续期限.png" width="450" height="300"/></p><p><strong style="font-size: 16px; line-height: 18px; font-weight: bold;">三、公司债券与股票的收益来源不同</strong></p><p>债券投资者获得的收入是从公司债券发行人手中得到的利息收入，公司债券的利息通常是固定的，属于公司的成本费用，通常计入公司的财务成本中。投资者在进行债券买卖时也可能获得资本收益。</p><p>股票投资者作为公司的股东，有权参与公司的利润分配，可以得到公司的利润的股息以及分红。并且在股票市场上进行股票的买卖时，投资者也可以获得资本收益。事实上，大部分股票投资者投资股票并不是为了获得股息和分红等收入，而是为了获得交易股票的利差收益，即资本收益。</p><p>更重要的是，有过投资股票经验的投资者基本上都体验到了<a href="http://www.365caidashi.com/zhishi/3040.html" target="_blank" style="color: rgb(71, 193, 251);">股票投资</a>的最大特点，即股价和股息的不确定性，这是股票投资的魅力之一。</p><p>&nbsp;</p>
+                        </div>
+                        
+                        <div class="row tm-margin-t-big">
+                            
+
+                            
+
+                                
+                        </div>
+                        
+                    </div>
+
+                    <aside class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 tm-aside-r">
+
+                        <div class="tm-aside-container">
+                            <h3 class="tm-gold-text tm-title">
+                                目录
+                            </h3>
+                            <nav>
+                                <ul class="nav">
+                                    <li><a href="http://localhost:8000/tutorial/blog1/" class="tm-text-link">什么是移动平均线？股票移动平均线使用技巧</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog2/" class="tm-text-link">移动平均线的买入和卖出时机怎么看？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog3/" class="tm-text-link">股票可以当天买当天卖吗？当天买的股票当天能卖吗？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog4/" class="tm-text-link">股票分红什么时候到账？如何查看股票分红？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog5/" class="tm-text-link">怎么看股票？如何分析一只股票？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog6/" class="tm-text-link">股票成交量有什么意义？量价关系又是什么？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog7/" class="tm-text-link">2018股指期货全面松绑意味着什么？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog8/" class="tm-text-link">权重股是什么意思？权重股如何影响市场走势？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog9/" class="tm-text-link">股改是什么意思？股改有哪些意义及作用？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog10/" class="tm-text-link">公司债券与股票有哪些区别？</a></li>
+                                </ul>
+                            </nav>
+                            <hr class="tm-margin-t-small">   
+                            <h3 class="tm-gold-text tm-title tm-margin-t-small">
+                                原文链接
+                            </h3>
+                            <nav>   
+                                <ul class="nav">
+                                    <li><a href="http://www.365caidashi.com/zhishi/4416.html" class="tm-text-link">公司债券与股票有哪些区别？</a></li>
+                                   
+                                </ul>
+                            </nav>
+</div>
+                        
+                        
+                    </aside>
+
+                </div>
+                
+            </div>
+        </section>
+<!-- load JS files -->
+		<!--和creative的整合-->
+         <script src="{% static 'bloglist/vendor/jquery/jquery.min.js'%}"></script>
+        <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script> <!-- Tether for Bootstrap, http://stackoverflow.com/questions/34567939/how-to-fix-the-error-error-bootstrap-tooltips-require-tether-http-github-h -->
+        <script src="{% static 'bloglist/vendor/bootstrap/js/bootstrap.min.js'%}"></script>                 <!-- Bootstrap (http://v4-alpha.getbootstrap.com/) -->
+
+
+		 <!-- Bootstrap core JavaScript -->
+
+    	<script src="{% static 'bloglist/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+		<!-- Plugin JavaScript -->
+		<script src="{% static 'bloglist/vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+		<script src="{% static 'bloglist/vendor/scrollreveal/scrollreveal.min.js'%}"></script>
+		<script src="{% static 'bloglist/vendor/magnific-popup/jquery.magnific-popup.min.js'%}"></script>
+
+		<!-- Custom scripts for this template -->
+		<script src="{% static 'bloglist/js/creative.min.js'%}"></script>
+
+</body>
+</html>

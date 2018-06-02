@@ -1,0 +1,183 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!--补充了creative的meta-->
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+
+    <title>理财小助手-教程</title>
+	<!--需要修改吗-->
+<!--
+Classic Template
+http://www.cssmoban.com/tm-488-classic
+-->
+    <!-- load stylesheets -->
+    <link rel="stylesheet" href="http://fonts.useso.com/css?family=Open+Sans:300,400">  <!-- Google web font "Open Sans" -->
+	<!--下面一行修改了地址到vendor-->
+    <link href="{% static 'bloglist/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">                                      <!-- Bootstrap style -->
+	<!--给creative的css文件夹中添加了下面的css-->
+    <link rel="stylesheet" href="{% static 'bloglist/css/templatemo-style.css'%}">                                   <!-- Templatemo style -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+          <![endif]-->
+	
+	<!--补充了creative的link-->
+	<!-- Custom fonts for this template -->
+    <link href="{% static 'bloglist/vendor/font-awesome/css/font-awesome.min.css'%}" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link href="{% static 'bloglist/vendor/magnific-popup/magnific-popup.css'%}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'bloglist/css/creative.min.css'%}" rel="stylesheet">
+
+</head>
+
+    <body id="page-top">
+       
+        <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">理财小助手</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://127.0.0.1:8000/">首页</a> <!--修改-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/recommend/">推荐</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/news/">新闻</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/tutorial/">教程</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/home/favourite/">个人</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="http://localhost:8000/account/">登录</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+        <div class="tm-contact-img-container">
+            
+        </div>
+
+        <section class="tm-section">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 col-xl-9">
+                        <div class="tm-blog-post">
+                            <h3 class="tm-gold-text">什么是移动平均线？股票移动平均线使用技巧</h3>
+							<div>移动平均线是什么？移动平均线实际上指的是某段时间内股价的算数平均值连接而来。移动平均线是由格兰维尔创建的，是根据道氏理论的三种趋势演化而来的，移动平均线将道氏理论更具体，更数据化的变现出来，从数字预测股票价格在短期、中期和长期的变动方向，为投资者提供决策的基础。<br/><img src="http://www.365caidashi.com/uploads/image/20180423/1524482273662934.jpg" title="移动平均线" alt="移动平均线" width="450" height="300"/><br/>
+								<div><strong style="font-size: 16px; line-height: 18px;font-weight:bold;">一、移动平均线的特征</strong></div>
+									平均线可以反映真实的价格变化趋势，通常被分为上升趋势或下降趋势。通过各种移动平均线的排列，可以预测市场的中长期趋势。同时，随着K线技术的灵活应用，可以实现低买高卖，从而获得更高的收益。</div>
+								<div>1、平滑特性：移动平均线采用“平均”价格，不像K图那样高低不平亦或是震荡，移动平均线往往是起落平稳的；</div>
+								<div>2、趋势特征：移动平均反映了股票价格的变化趋势，具有趋势特征；</div>
+								<div>3、助涨特点：在牛市中，向某一方向移动的平均水平，将会持续一段时间后才会改变方向，所以在股价上涨的趋势下，移动平均线可以看成多投的有效防守线，具有助涨的特点；</div>
+								<div>4、助跌特征：与助涨的特点相反，移动平均线可以看作是股票价格下跌趋势中空方的防御线，它具有助跌的特征；</div>
+								<div>5、稳定特征：通常移动平均线的周期越长，稳定特征越明显，即必须上涨走势很明确后，移动平均线会才上升，在股票价格下跌初期，移动平均线仍在往上走，只有在股价大幅下挫后，移动平均线才会调头向下。</div><br/>
+								<div><strong style="font-size: 16px; line-height: 18px;font-weight:bold;">二、移动平均线的类型</strong></div>
+									<div>根据时间周期的长短，移动平均线可分为短期移动平均线、中期移动平均线和长期移动平均线。</div>
+									<div>较常用的短期移动平均线，如5日均线，10日均线，20日均线，30日均线。</div>
+									<div>较常用的中期移动平均线，如45日均线，60日均线，90日均线。</div>
+									<div>较常用的长期移动平均线，如120日均线和250日均线。</div>
+									<div><strong style="font-size: 16px; line-height: 18px;font-weight:bold;">三、移动平均线的使用技巧</strong></div>
+									<div>当移动平均线向上，并且股票价格始终站在移动平均线之上时，适合继续买入或持有股票；</div>
+							<div>当移动平均线向下，并且股票价格始终无法站在移动平均线之上时，可以适当卖出。</div>
+							<div>当平均线向上，股票价格在均价线之下变化，或平均线向下，股票价格在均价线之上变化时，适合空仓观望。</div>
+							<div>&nbsp;</div>
+							<div></div>
+<div><br/></div>
+
+                          
+                        </div>
+                        
+                        <div class="row tm-margin-t-big">
+                            
+
+                            
+
+                                
+                        </div>
+                        
+                    </div>
+
+                    <aside class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 tm-aside-r">
+
+                        <div class="tm-aside-container">
+                            <h3 class="tm-gold-text tm-title">
+                                目录
+                            </h3>
+                            <nav>
+                                <ul class="nav">
+                                    <li><a href="http://localhost:8000/tutorial/blog1/" class="tm-text-link">什么是移动平均线？股票移动平均线使用技巧</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog2/" class="tm-text-link">移动平均线的买入和卖出时机怎么看？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog3/" class="tm-text-link">股票可以当天买当天卖吗？当天买的股票当天能卖吗？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog4/" class="tm-text-link">股票分红什么时候到账？如何查看股票分红？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog5/" class="tm-text-link">怎么看股票？如何分析一只股票？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog6/" class="tm-text-link">股票成交量有什么意义？量价关系又是什么？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog7/" class="tm-text-link">2018股指期货全面松绑意味着什么？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog8/" class="tm-text-link">权重股是什么意思？权重股如何影响市场走势？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog9/" class="tm-text-link">股改是什么意思？股改有哪些意义及作用？</a></li>
+                                    <li><a href="http://localhost:8000/tutorial/blog10/" class="tm-text-link">公司债券与股票有哪些区别？</a></li>
+                                </ul>
+                            </nav>
+                            <hr class="tm-margin-t-small">   
+                            <h3 class="tm-gold-text tm-title tm-margin-t-small">
+                                原文链接
+                            </h3>
+                            <nav>   
+                                <ul class="nav">
+                                    <li><a href="http://www.365caidashi.com/gupiao/gonglue/5142.html" class="tm-text-link">什么是移动平均线？股票移动平均线使用技巧</a></li>
+                                </ul>
+                            </nav>
+</div>
+                        
+                        
+                    </aside>
+
+                </div>
+                
+            </div>
+        </section>
+<!-- load JS files -->
+		<!--和creative的整合-->
+         <script src="{% static 'bloglist/vendor/jquery/jquery.min.js'%}"></script>
+        <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script> <!-- Tether for Bootstrap, http://stackoverflow.com/questions/34567939/how-to-fix-the-error-error-bootstrap-tooltips-require-tether-http-github-h --> 
+        <script src="{% static 'bloglist/vendor/bootstrap/js/bootstrap.min.js'%}"></script>                 <!-- Bootstrap (http://v4-alpha.getbootstrap.com/) -->
+		
+		
+		 <!-- Bootstrap core JavaScript -->
+   
+    	<script src="{% static 'bloglist/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+
+		<!-- Plugin JavaScript -->
+		<script src="{% static 'bloglist/vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+		<script src="{% static 'bloglist/vendor/scrollreveal/scrollreveal.min.js'%}"></script>
+		<script src="{% static 'bloglist/vendor/magnific-popup/jquery.magnific-popup.min.js'%}"></script>
+
+		<!-- Custom scripts for this template -->
+		<script src="{% static 'bloglist/js/creative.min.js'%}"></script>
+
+</body>
+</html>

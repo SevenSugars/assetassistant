@@ -196,7 +196,37 @@ def recommend(request):
     return render(request, 'recommend.html', {'recF': recF, 'recS': recS})
 
 def tutorial(request):
-    pass
+    return render(request, 'tutorial.html')
+
+def blog1(request):
+    return render(request, 'blog1.html')
+
+def blog2(request):
+    return render(request, 'blog2.html')
+
+def blog3(request):
+    return render(request, 'blog3.html')
+
+def blog4(request):
+    return render(request, 'blog4.html')
+
+def blog5(request):
+    return render(request, 'blog5.html')
+
+def blog6(request):
+    return render(request, 'blog6.html')
+
+def blog7(request):
+    return render(request, 'blog7.html')
+
+def blog8(request):
+    return render(request, 'blog8.html')
+
+def blog9(request):
+    return render(request, 'blog9.html')
+
+def blog10(request):
+    return render(request, 'blog10.html')
 
 def showstock(request, stock_code):
     stock_code = str(stock_code)
@@ -598,7 +628,6 @@ def showhist(request):
     email = request.session.get("email")
     username = request.session.get("username")
     # print(email)
-    alterasset()
     if email is None:
         info = '请先登录！'
         return render(request, 'error.html', {'error': info})
@@ -608,7 +637,7 @@ def showhist(request):
         hist = []
     return render(request, 'record.html', {'hist': hist, 'username': username, 'email': email})
 
-def alterasset():
+def alterasset(request):
     emails = models.User.objects.values_list('emailaddress')
     for email in emails:
         email = email[0]
@@ -653,6 +682,7 @@ def alterasset():
         lastasset = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
         asset.money = lastasset.money
         asset.save()
+        return render(request, 'alterasset.html')
 
 def showasset(request):
     email = request.session.get("email")
