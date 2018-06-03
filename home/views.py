@@ -312,9 +312,7 @@ def showstock(request, stock_code):
             fav.rate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
             fav.save()
         elif request.POST.__contains__('buy'):
-            print(1)
             if request.method == 'POST':
-                print(2)
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
@@ -357,9 +355,7 @@ def showstock(request, stock_code):
                     asset.save()
             return render(request, 'buy.html', {'item': stock})
         else:
-            print(3)
             if request.method == 'POST':
-                print(4)
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
@@ -402,7 +398,7 @@ def showstock(request, stock_code):
 
 def showfund(request, fund_code):
     global code
-    print(code, fund_code)
+    #print(code, fund_code)
     if code != fund_code:
         print('plot')
         fund_code = str(fund_code)
@@ -602,7 +598,7 @@ def error(request):
 def favourite(request):
     email = request.session.get("email")
     username = request.session.get("username")
-    print(username)
+    #print(username)
     #print(email)
     if email is None:
         info = '请先登录！'
@@ -656,12 +652,12 @@ def alterasset(request):
         own = models.Own.objects.filter(emailaddress=email)
         for item in own:
             if len(item.name) > 4:
-                print(item.name)
+                #print(item.name)
                 r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + item.code + '.js')
                 pattern = re.compile('"y":(.*?),"equityReturn"')
                 pricelist = re.findall(pattern, r.text)
                 price = pricelist[-1]
-                print(price)
+                #print(price)
                 asset.fund += float(price) * float(item.volume)
                 pfund += float(item.buy) * float(item.volume)
             else:
@@ -676,7 +672,7 @@ def alterasset(request):
                     price = stockdatasplit[3]
                 asset.stock += float(price) * float(item.volume)
                 pstock += float(item.buy) * float(item.volume)
-        print(asset.fund)
+        #print(asset.fund)
         if pfund != 0:
             asset.fundprofit = (asset.fund - pfund) / pfund * 100
         else:
