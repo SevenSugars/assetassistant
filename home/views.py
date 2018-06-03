@@ -109,14 +109,18 @@ def sign(request):
 
 def newspage(request):
     info = ts.get_latest_news(top=2, show_content=True)
+    newstmp1 = models.News.objects.order_by('-pk')[0]
+    newstmp2 = models.News.objects.order_by('-pk')[1]
     news = models.News()
     news.title = info.title[0].__str__()
     news.content = info.content[0].__str__()
-    news.save()
+    if news.title != newstmp1.title and news.title != newstmp2.title:
+        news.save()
     news = models.News()
     news.title = info.title[1].__str__()
     news.content = info.content[1].__str__()
-    news.save()
+    if news.title != newstmp1.title and news.title != newstmp2.title:
+        news.save()
     news = models.News.objects.order_by('-pk')
     news1 = news[0]
     news2 = news[1]
