@@ -67,11 +67,21 @@ def sign(request):
             except:
                 info = '该邮箱未注册！'
                 print(info)
+                try:
+                    del request.session["username"]
+                    del request.session["email"]
+                except:
+                    pass
                 #return render(request, 'error.html', {'error': info})
             else:
                 if user.password != password:
                     info = '密码错误！'
                     print(info)
+                    try:
+                        del request.session["username"]
+                        del request.session["email"]
+                    except:
+                        pass
                     #return render(request, 'error.html', {'error': info})
                 else:
                     request.session["email"] = email
