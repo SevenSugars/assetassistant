@@ -248,7 +248,7 @@ def showstock(request, stock_code):
         stock.high = stockdatasplit[4]
         stock.low = stockdatasplit[5]
         stock.price = stockdatasplit[3]
-        stock.currentrate = (float(stock.price) - float(stock.close)) / float(stock.close) * 100
+        stock.currentrate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
         stock.save()
 
         response = requests.get('http://image.sinajs.cn/newchart/min/n/sz' + stock_code + '.gif')
@@ -312,11 +312,13 @@ def showstock(request, stock_code):
             fav.rate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
             fav.save()
         elif request.POST.__contains__('buy'):
+            print(1)
             if request.method == 'POST':
+                print(2)
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
-                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
+                    lastasset = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
                     if number <= 0:
                         info = '请输入大于0的数字！'
                         return render(request, 'error.html', {'error': info})
@@ -355,11 +357,13 @@ def showstock(request, stock_code):
                     asset.save()
             return render(request, 'buy.html', {'item': stock})
         else:
+            print(3)
             if request.method == 'POST':
+                print(4)
                 if request.POST.get('number'):
                     number = request.POST.get('number')
                     number = float(number)
-                    lastasset = models.Personal_asset.objects.get(emailaddress=email).order_by('-pk')[0]
+                    lastasset = models.Personal_asset.objects.filter(emailaddress=email).order_by('-pk')[0]
                     if number <= 0:
                         info = '请输入大于0的数字！'
                         return render(request, 'error.html', {'error': info})
@@ -367,7 +371,7 @@ def showstock(request, stock_code):
                     try:
                         own = models.Own.objects.get(emailaddress=email, name=stockdatasplit[0][21:])
                     except:
-                        info = '无法卖出不持有的基金！'
+                        info = '无法卖出不持有的股票！'
                         return render(request, 'error.html', {'error': info})
                     else:
                         if float(own.volume) < number:

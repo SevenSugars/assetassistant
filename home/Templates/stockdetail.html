@@ -1,31 +1,335 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>理财小助手-股票</title>
-</head>
-<body>
-<h3>{{ stock.name }}</h3>
-<h3>{{ stock.code }}</h3>
-<form action="" method="post">
-{% csrf_token %}
-<input type="submit" name="shoucang" value="收藏" />
-<input type="submit" name="buy" value="买入" />
-<input type="submit" name="sell" value="卖出" />
-</form>
-<h3>price：{{ stock.price }}</h3>
-<h3>open：{{ stock.open }}</h3>
-<h3>close：{{ stock.close }}</h3>
-<h3>high：{{ stock.high }}</h3>
-<h3>low：{{ stock.low }}</h3>
-<h3>currentrate：{{ stock.currentrate }}%</h3>
-<p>
-    <img src="/static/stock0.png" />
-    <img src="/static/stock1.png" />
-    <img src="/static/stock2.png" />
-    <img src="/static/stock3.png" />
+    <!-- Favicon-->
+    <link rel="icon" href="{% static 'recommend/favicon.ico'%}" type="image/x-icon">
 
-</p>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="{% static 'recommend/plugins/bootstrap/css/bootstrap.css'%}" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="{% static 'recommend/plugins/node-waves/waves.css'%}" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="{% static 'recommend/plugins/animate-css/animate.css'%}" rel="stylesheet" />
+
+    <!-- Bootstrap Select Css -->
+    <link href="{% static 'recommend/plugins/bootstrap-select/css/bootstrap-select.css'%}" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="{% static 'recommend/css/style.css'%}" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{% static 'recommend/css/themes/all-themes.css'%}" rel="stylesheet" />
+
+    <!-- Sweetalert Css -->
+    <link href="{% static 'recommend/plugins/sweetalert/sweetalert.css'%}" rel="stylesheet" />
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <div class="search-icon">
+            <i class="material-icons">search</i>
+        </div>
+        <input type="text" placeholder="START TYPING...">
+        <div class="close-search">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+    <!-- #END# Search Bar -->
+    <!-- Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ username }}</div>
+                    <div class="email">{{ email }}</div>
+                    <div class="btn-group user-helper-dropdown">
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="http://127.0.0.1:8000/account"><i class="material-icons">input</i>登出</a></li> <!--修改-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">导航栏</li>
+                    <li>
+                        <a href="http://127.0.0.1:8000/">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="http://127.0.0.1:8000/news/"> <!-- 修改-->
+                            <i class="material-icons">public</i>
+                            <span>新闻</span>
+                        </a>
+                    </li>
+                    <li >
+                        <a href="http://127.0.0.1:8000/recommend/">
+                            <i class="material-icons">collections</i>
+                            <span>推荐</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://127.0.0.1:8000/tutorial">
+                            <i class="material-icons">library_books</i>
+                            <span>教程</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">person</i>
+                            <span>个人</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li >
+                                <a href="http://localhost:8000/home/favourite" > <!--修改-->
+                                    <span>收藏</span>
+                                </a>
+                            </li>
+                            <li >
+                                <a href="http://localhost:8000/home/own" > <!--修改-->
+                                    <span>当前持有</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://localhost:8000/home/hist">
+                                    <span>交易记录</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/asset">
+                                    <span>当前资产</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/profit">
+                                    <span>历史收益</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:8000/home/recharge">
+                                    <span>充值</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <div class="legal">
+                <div class="copyright">
+                    &copy; 2018 <a href="javascript:void(0);">理财小助手</a>.
+                </div>
+                <div class="version">
+                    <b>Version: </b> 1.0.0
+                </div>
+            </div>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+    </section>
+
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand" href="http://127.0.0.1:8000/">理财小助手</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>股票详情</h2>
+            </div>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                {{ stock.name }}
+                                <small>{{ stock.code }}</small>
+                            </h2>
+
+                        </div>
+                        <div class="body">
+                            <img src="{% static '/stock0.png'%}" class="js-animating-object img-responsive">
+
+                            <img src="{% static '/stock1.png'%}" class="js-animating-object img-responsive">
+
+                            <img src="{% static '/stock2.png'%}" class="js-animating-object img-responsive">
+
+                            <img src="{% static '/stock3.png'%}" class="js-animating-object img-responsive">
+
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box bg-red">
+                                    <div class="icon">
+                                        <i class="material-icons">shopping_cart</i>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">单位净值</div>
+                                        <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20">{{ stock.price }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box bg-brown">
+                                    <div class="icon">
+                                        <span class="chart chart-line">9,4,6,5,6,4,7,3</span>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">今日开盘价</div>
+                                        <div class="number">{{ stock.open }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box bg-grey">
+                                    <div class="icon">
+                                        <span class="chart chart-line">9,4,6,5,6,4,7,3</span>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">今日收盘价</div>
+                                        <div class="number">{{ stock.close }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box bg-light-green">
+                                    <div class="icon">
+                                        <span class="chart chart-line">9,4,6,5,6,4,7,3</span>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">今日最高价</div>
+                                        <div class="number">{{ stock.high }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box bg-blue-grey">
+                                    <div class="icon">
+                                        <span class="chart chart-line">9,4,6,5,6,4,7,3</span>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">今日最低价</div>
+                                        <div class="number">{{ stock.low }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="info-box bg-black">
+                                    <div class="icon">
+                                        <span class="chart chart-line">9,4,6,5,6,4,7,3</span>
+                                    </div>
+                                    <div class="content">
+                                        <div class="text">当前涨跌幅</div>
+                                        <div class="number">{{ stock.currentrate }}%</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="submit" name="shoucang" value="收藏" />
+                            <input type="submit" name="buy" value="买入" />
+                            <input type="submit" name="sell" value="卖出" />
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="{% static 'recommend/plugins/jquery/jquery.min.js'%}"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="{% static 'recommend/plugins/bootstrap/js/bootstrap.js'%}"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="{% static 'recommend/plugins/bootstrap-select/js/bootstrap-select.js'%}"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{% static 'recommend/plugins/jquery-slimscroll/jquery.slimscroll.js'%}"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{% static 'recommend/plugins/node-waves/waves.js'%}"></script>
+
+    <!-- Custom Js -->
+    <script src="{% static 'recommend/js/admin.js'%}"></script>
+    <script src="{% static 'recommend/js/pages/ui/animations.js'%}"></script>
+
+    <!-- Demo Js -->
+    <script src="{% static 'recommend/js/demo.js'%}"></script>
+
+
+    <!--infobox-->
+    <!-- Jquery CountTo Plugin Js -->
+    <script src="{% static 'recommend/plugins/jquery-countto/jquery.countTo.js'%}"></script>
+
+    <!-- Sparkline Chart Plugin Js -->
+    <script src="{% static 'recommend/plugins/jquery-sparkline/jquery.sparkline.js'%}"></script>
+
+    <!-- Custom Js -->
+    <script src="{% static 'recommend/js/pages/widgets/infobox/infobox-2.js'%}"></script>
+
+    <!-- Bootstrap Notify Plugin Js -->
+    <script src="{% static 'recommend/plugins/bootstrap-notify/bootstrap-notify.js'%}"></script>
+
+    <!-- SweetAlert Plugin Js -->
+    <script src="{% static 'recommend/plugins/sweetalert/sweetalert.min.js'%}"></script>
+
+    <script src="{% static 'recommend/js/pages/ui/dialogs.js'%}"></script>
+
+
+
 </body>
+
 </html>

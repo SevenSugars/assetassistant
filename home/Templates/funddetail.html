@@ -206,7 +206,7 @@
                                     </div>
                                     <div class="content">
                                         <div class="text">单位净值</div>
-                                        <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20">{{ fund.price }}%</div>
+                                        <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20">{{ fund.price }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -266,16 +266,12 @@
                                 </div>
                             </div>
 
-                            <div class="row clearfix js-sweetalert">
-                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-
-                                    <button class="btn btn-primary waves-effect" data-type="prompt">买入</button>
-                                </div>
-                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-
-                                    <button class="btn btn-primary waves-effect" data-type="prompt">卖出</button>
-                                </div>
-                            </div>
+                            <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="submit" name="shoucang" value="收藏" />
+                            <input type="submit" name="buy" value="买入" />
+                            <input type="submit" name="sell" value="卖出" />
+                            </form>
 
                         </div>
                     </div>
