@@ -99,7 +99,8 @@ def sign(request):
             user.username = request.GET.get('username')
             user.password = request.GET.get('password')
             user.emailaddress = request.GET.get('email')
-            request.session["email"] = user.emailaddress
+            #request.session["email"] = user.emailaddress
+            #request.session["username"] = user.username
             user.save()
             #资产数据库创立
             asset = models.Personal_asset()
