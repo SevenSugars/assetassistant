@@ -129,18 +129,25 @@
 								</a>
 								{% for item in news %}
 								<div class="single-latest-post row align-items-center">
-									<div class="col-lg-5 post-left">
+									<div class="col-lg-4 post-left">
 										<div class="feature-img relative">
 											<div class="overlay overlay-bg"></div>
-											<img class="img-fluid" src="{% static 'news/img/l1.jpg'%}" alt="">
+											<!--<img class="img-fluid" src="{% static 'news/img/l1.jpg'%}" alt="">-->
 										</div>
-										
+
 									</div>
 
-									<div class="col-lg-7 post-right">
+									<div class="col-lg-9 post-right">
+
 										<a href="/news/{{ item.id }}">
-											<h4>{{ item.title }}</h4>
+											<h3>{{ item.title }}</h3>
 										</a>
+
+										<div color="blue" style="overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap; "><h4>{{item.content }}</h4></div>
+										<br><br><br>
 									</div>
 								</div>
 								{% endfor %}

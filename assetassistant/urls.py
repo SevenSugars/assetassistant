@@ -37,5 +37,6 @@ urlpatterns = [
     path('home/', include('home.urls1')),
     path('stock/', include('home.urls2')),
     path('fund/', include('home.urls3')),
-    path('error/', views.error)
+    path('error/', views.error),
+    path('alterasset/', views.alterasset),
 ]

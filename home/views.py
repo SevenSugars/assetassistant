@@ -1,6 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')
 from django.shortcuts import render, render_to_response
+from django.http import HttpResponseRedirect
 from django.core import serializers
 from . import models
 import tushare as ts
@@ -117,6 +118,7 @@ def sign(request):
             info.save()
     return render(request, 'sign.html')
 
+
 def newspage(request):
     info = ts.get_latest_news(top=2, show_content=True)
     newstmp1 = models.News.objects.order_by('-pk')[0]
@@ -208,6 +210,31 @@ def recommend(request):
             recS.save()
     recF = models.RecommendFund.objects.all()
     recS = models.RecommendStock.objects.all()
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        code = str(code)
+        if len(code) != 6:
+            info = '代码错误！'
+            return render(request, 'error.html', {'error': info})
+        stockdata = requests.get('http://hq.sinajs.cn/list=sh' + code)
+        if (len(stockdata.text) <= 24):
+            stockdata = requests.get('http://hq.sinajs.cn/list=sz' + code)
+            if (len(stockdata.text) <= 24):
+                r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + code + '.js')
+                pattern0 = re.compile('var fS_name = "(.*?)"')
+                name = re.findall(pattern0, r.text)
+                if len(name) == 0:
+                    info = '代码错误！'
+                    return render(request, 'error.html', {'error': info})
+                pattern5 = re.compile('"y":(.*?),"equityReturn"')
+                price = re.findall(pattern5, r.text)
+                if price == []:
+                    info = '代码错误！'
+                    return render(request, 'error.html', {'error': info})
+                path = r'http://127.0.0.1:8000/fund/' + code
+                return HttpResponseRedirect(path)
+        path = r'http://127.0.0.1:8000/stock/' + code
+        return HttpResponseRedirect(path)
     return render(request, 'recommend.html', {'recF': recF, 'recS': recS})
 
 def tutorial(request):
@@ -262,7 +289,10 @@ def showstock(request, stock_code):
         stock.high = stockdatasplit[4]
         stock.low = stockdatasplit[5]
         stock.price = stockdatasplit[3]
-        stock.currentrate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
+        try:
+            stock.currentrate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
+        except:
+            stock.currentrate = 0
         stock.save()
 
         response = requests.get('http://image.sinajs.cn/newchart/min/n/sz' + stock_code + '.gif')
@@ -289,7 +319,10 @@ def showstock(request, stock_code):
         stock.high = stockdatasplit[4]
         stock.low = stockdatasplit[5]
         stock.price = stockdatasplit[3]
-        stock.currentrate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
+        try:
+            stock.currentrate = round((float(stock.price) - float(stock.close)) / float(stock.close) * 100, 4)
+        except:
+            stock.currentrate = 0
         stock.save()
         response = requests.get('http://image.sinajs.cn/newchart/min/n/sh' + stock_code + '.gif')
         image = Image.open(BytesIO(response.content))
@@ -413,9 +446,9 @@ def showstock(request, stock_code):
 def showfund(request, fund_code):
     global code
     #print(code, fund_code)
+    fund_code = str(fund_code)
     if code != fund_code:
         print('plot')
-        fund_code = str(fund_code)
         while len(fund_code) < 6:
             fund_code = '0' + fund_code
         r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + fund_code + '.js')
@@ -442,7 +475,7 @@ def showfund(request, fund_code):
         fund.threemrate = threemonth[0]
         fund.onemrate = onemonth[0]
         fund.price = price[-1]
-        fund.currentrate =  rate[-1]
+        fund.currentrate = rate[-1]
         fund.save()
         pattern = re.compile('var Data_grandTotal = \[(.*?)\];')
         tmp = re.findall(pattern, r.text)
@@ -519,7 +552,7 @@ def showfund(request, fund_code):
             fav.code = fund_code
             fav.emailaddress = email
             fav.name = name[0]
-            fav.rate = oneyear[0]
+            fav.rate = rate[-1]
             fav.save()
         elif request.POST.__contains__('buy'):
             if request.method == 'POST':
@@ -619,10 +652,33 @@ def favourite(request):
         return render(request, 'error.html', {'error': info})
     try:
         favF = models.FavouriteFund.objects.filter(emailaddress=email)
+        for item in favF:
+            fund_code = str(item.code)
+            while len(fund_code) < 6:
+                fund_code = '0' + fund_code
+            r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + fund_code + '.js')
+            pattern6 = re.compile('"equityReturn":(.*?),"unitMoney"')
+            rate = re.findall(pattern6, r.text)
+            item.rate = rate[-1]
+            item.save()
     except:
         favF = []
     try:
         favS = models.FavouriteStock.objects.filter(emailaddress=email)
+        for item in favS:
+            stock_code = str(item.code)
+            while len(stock_code) < 6:
+                stock_code = '0' + stock_code
+            stockdata = requests.get('http://hq.sinajs.cn/list=sh' + stock_code)
+            stockdatasplit = stockdata.text.split(',')
+            if (len(stockdata.text) == 24):
+                stockdata = requests.get('http://hq.sinajs.cn/list=sz' + stock_code)
+                stockdatasplit = stockdata.text.split(',')
+            close = stockdatasplit[2]
+            price = stockdatasplit[3]
+            currentrate = round((float(price) - float(close)) / float(close) * 100, 4)
+            item.rate = currentrate
+            item.save()
     except:
         favS = []
     return render(request, 'favorite.html', {'favF': favF, 'favS': favS, 'username': username, 'email': email})
@@ -719,45 +775,6 @@ def showprofit(request):
     info = serializers.serialize("json", info)
     #print(info)
     return render(request, 'profit.html', {'info': info, 'username': username, 'email': email})
-
-def search(request, code):
-    stock_code = code
-    stockdata = requests.get('http://hq.sinajs.cn/list=sh' + stock_code)
-    stockdatasplit = stockdata.text.split(',')
-    if (len(stockdata.text) == 24):
-        stockdata = requests.get('http://hq.sinajs.cn/list=sz' + stock_code)
-        stockdatasplit = stockdata.text.split(',')
-        stock = models.Stock()
-        stock.code = stock_code
-        stock.name = stockdatasplit[0][21:]
-        stock.open = stockdatasplit[1]
-        stock.close = stockdatasplit[2]
-        if float(stock.close) == 0:
-            pass
-        else:
-            showstock(request,code)
-    else:
-        stock = models.Stock()
-        stock.code = stock_code
-        stock.name = stockdatasplit[0][21:]
-        stock.open = stockdatasplit[1]
-        stock.close = stockdatasplit[2]
-        if float(stock.close) == 0:
-            pass
-        else:
-            showstock(request,code)
-
-    fund_code = code
-    while len(fund_code) < 6:
-        fund_code = '0' + fund_code
-    r = requests.get('http://fund.eastmoney.com/pingzhongdata/' + fund_code + '.js')
-    pattern0 = re.compile('var fS_name = "(.*?)"')
-    name = re.findall(pattern0, r.text)
-    if len(name)==0:
-        info = '代码错误！'
-        return render(request, 'error.html', {'error': info})
-    else:
-        showfund(request,code)
 
 def recharge(request):
     email = request.session.get("email")
